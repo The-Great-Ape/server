@@ -5,14 +5,7 @@
   "scripts": {
     "start": "node ./app.js",
     "script": "node ./script/script-app.js",
-    "startdev": "node $NODE_DEBUG_OPTION ./api/app.js",
     "nodemon": "nodemon app.js",
-    "devnodemon": "nodemon $NODE_DEBUG_OPTION ./api/app.js",
-    "test": "cross-env TEST_ENV=test node node_modules/mocha/bin/mocha --opts .mocharc",
-    "test-debug": "cross-env TEST_ENV=test node node_modules/mocha/bin/mocha --opts .mocharc $NODE_DEBUG_OPTION",
-    "testAdmin": "cross-env TEST_ENV=test node node_modules/mocha/bin/mocha --opts .mocharc $NODE_DEBUG_OPTION ./admin/**/*.spec.js",
-    "run_app_on_windows": "node ./api/app.js",
-    "debug_app_on_windows": "node %NODE_DEBUG_OPTION% ./api/app.js"
   },
   "_moduleAliases": {
     "$lib": "./lib"
