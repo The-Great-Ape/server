@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./app.js",
     "script": "node ./script/script-app.js",
-    "nodemon": "nodemon app.js",
+    "nodemon": "nodemon app.js"
   },
   "_moduleAliases": {
     "$lib": "./lib"
