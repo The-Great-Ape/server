@@ -1,0 +1,14 @@
+[
+	{
+		"group": "guest",
+		"id": "1",
+		"permissions": [
+			{
+				"resource": "*",
+				"methods": "*",
+				"action": "allow",
+				"subRoutes": []
+			}
+		]
+	}
+]
