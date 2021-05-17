@@ -174,7 +174,7 @@ class App {
     initPassport() {
         this.app.use(passport.initialize());
         this.app.use(passport.session());
-        require('../../common/passport/auth')(passport);
+        require('./lib/passport/auth')(passport);
 
         this.app.use((req, res, next) => {
             const token = req.headers['token'];
@@ -218,7 +218,7 @@ class App {
     //Websocket
     initSockets() {
         try {
-            let websocket = require('../websocket/websocket');
+            let websocket = require('./lib/websocket/websocket');
             websocket.init(this.server);
             this.websocket = websocket;
             logger.info(`Worker ${process.pid}: [Websocket]: Initialized`);
@@ -277,11 +277,8 @@ class App {
         this.initExpress();
         this.initControllers();
 
-
-        const ErrorHandler = require('$lib/error-handler');
-
         this.app.use((err, req, res, next) => {
-            ErrorHandler.handleError(err, req, res, next);
+            util.handleError(err, req, res, next);
         });
     }
 
