@@ -4,6 +4,7 @@ Dependencies
 require('dotenv').config();
 require('module-alias/register');
 
+const { config } = require('express-acl');
 const mongoose = require('mongoose'),
     fs = require('fs'),
     jwt = require('jsonwebtoken'),
@@ -15,7 +16,9 @@ const mongoose = require('mongoose'),
     morgan = require('morgan'),
     helmet = require('helmet'),
     compression = require('compression'),
+    config = require('config'),
     passport = require('passport'),
+    session = require('express-session'),
     acl = require('express-acl'),
     path = require('path');
 
@@ -88,6 +91,9 @@ class App {
             extended: false
         }));
 
+        //Session
+        this.app.use(session(config.session));
+
         logger.info(`Worker ${process.pid}: [Express]: Initialized`);
     }
 
@@ -152,7 +158,7 @@ class App {
 
     //Mongoose
     async initMongoose() {
-        const url = process.env.MONGODB_URL;
+        const url = process.env.MONGODB_URL || 'localhost:27017';
         const dbConfig = {
             useUnifiedTopology: true,
             retryWrites: false,
