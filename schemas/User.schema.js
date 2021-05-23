@@ -34,15 +34,14 @@ const userSchema = new Schema({
     });
 
 class User {
-    static async addUser(user) {
-        let { discordId, solAddress } = user;
-
+    static async addUser(discordId, solAddress) {
+        console.log(discordId, solAddress);
         if (discordId && solAddress) {
-            await this.create({
-                discordId,
-                solAddress,
-                matchHistory: []
-            })
+            await this.findOneAndUpdate(
+                { discordId },
+                { $set: { discordId, solAddress } },
+                { upsert: true, new: true }
+              );
         }
     }
 
