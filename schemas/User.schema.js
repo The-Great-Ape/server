@@ -34,7 +34,7 @@ const userSchema = new Schema({
     });
 
 class User {
-    addUser(user) {
+    static async addUser(user) {
         let { discordId, solAddress } = user;
 
         if (discordId && solAddress) {
@@ -46,7 +46,7 @@ class User {
         }
     }
 
-    recordMatch(match) {
+    static async recordMatch(match) {
         let { userId, game, place } = match;
 
         if (userId && game && place) {

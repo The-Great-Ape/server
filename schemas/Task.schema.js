@@ -1,6 +1,6 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
-let logger = require('$common/lib/logger');
+let logger = require('$lib/logger');
 
 let schema = new Schema({
     name: String,

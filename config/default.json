@@ -1,9 +1,9 @@
 {
-    "port": "3000",
+    "port": "4000",
     "oauth2": {
-        "redirect_uri": "http://212.227.201.44:3000/login/callback",
+        "redirect_uri": "http://localhost:4000/login/callback",
         "client_id": "844584321549598730",
-        "secret": "7cHPquctyObFvZrXF7CpOXQiaLodoXcz",
+        "secret": "6oCHxCBKSBRcYEtwza69QO9KpPdAe-Fv",
         "scopes": [
             "identify"
         ]

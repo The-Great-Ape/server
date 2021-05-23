@@ -4,7 +4,7 @@ Dependencies
 require('dotenv').config();
 require('module-alias/register');
 
-const { config } = require('express-acl');
+//const { config } = require('express-acl');
 const mongoose = require('mongoose'),
     fs = require('fs'),
     jwt = require('jsonwebtoken'),
@@ -17,6 +17,7 @@ const mongoose = require('mongoose'),
     helmet = require('helmet'),
     compression = require('compression'),
     config = require('config'),
+    util = require('./lib/util'),
     passport = require('passport'),
     session = require('express-session'),
     acl = require('express-acl'),
@@ -46,7 +47,7 @@ class App {
 
     async initServer() {
         this.app = express();
-        this.port = this.port ? this.port : parseInt(process.env.PORT || 3000, 10);
+        this.port = this.port ? this.port : parseInt(config.PORT || 4000, 10);
         try {
             //await this.initMongoose();
 
@@ -99,37 +100,7 @@ class App {
 
     //CORs
     initCORS() {
-        const allowedOrigins = [
-            'localhost:3000',
-            undefined,
-            null];
-
-        let allowLocalhost = ['development', 'dev', 'qa', 'stage', 'staging'];
-
-        if (allowLocalhost.indexOf(process.env.NODE_ENV) > -1) {
-            allowedOrigins.push('http://localhost:3000');
-            allowedOrigins.push('http://localhost:3001');
-            allowedOrigins.push('http://localhost:3002');
-            allowedOrigins.push('http://localhost:3003');
-            allowedOrigins.push('http://localhost:3004');
-        }
-
-        const corsOptions = {
-            origin: function (origin, callback) {
-                if (allowedOrigins.indexOf(origin) !== -1) {
-                    callback(null, true);
-                } else {
-                    logger.error('[Cors]: Invalid origin: ' + origin);
-                    callback(new Error('Not allowed by CORS'));
-                }
-            },
-            methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-            allowedHeaders: 'X-Requested-With,content-type,token,Authorization, set-cookie',
-            credentials: true,
-            exposedHeaders: 'token'
-        };
-
-        this.app.use(cors(corsOptions));
+        this.app.use(cors());
     }
 
     //ACL
@@ -274,7 +245,7 @@ class App {
 
         logger.info(`Worker ${process.pid}: Listening on port ${this.port}, in ${process.env.NODE_ENV}`);
 
-        //this.initCORS();
+        this.initCORS();
         //this.initPassport();
         //this.initSockets();
         //await this.initACL();
