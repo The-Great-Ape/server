@@ -4,23 +4,18 @@ Dependencies
 require('dotenv').config();
 require('module-alias/register');
 
-//const { config } = require('express-acl');
 const mongoose = require('mongoose'),
     fs = require('fs'),
-    jwt = require('jsonwebtoken'),
     cors = require('cors'),
     express = require('express'),
     walkDir = require('walkdir'),
     logger = require('./lib/logger'),
-    bodyParser = require('body-parser'),
     morgan = require('morgan'),
     helmet = require('helmet'),
     compression = require('compression'),
     config = require('config'),
     util = require('./lib/util'),
-    passport = require('passport'),
     session = require('express-session'),
-    acl = require('express-acl'),
     path = require('path');
 
 class App {
@@ -36,7 +31,6 @@ class App {
         //states
         this.isClosing = false;
     }
-
 
     /*-------------
     Commands
@@ -62,7 +56,6 @@ class App {
         }
     }
 
-
     /*-------------
     Modules
     ---------------*/
@@ -86,12 +79,6 @@ class App {
             next();
         });
 
-        //Body Parser
-        this.app.use(bodyParser.json({}));
-        this.app.use(bodyParser.urlencoded({
-            extended: false
-        }));
-
         //Session
         this.app.use(session(config.session));
 
@@ -101,30 +88,6 @@ class App {
     //CORs
     initCORS() {
         this.app.use(cors());
-    }
-
-    //ACL
-    async initACL() {
-        try {
-            acl.config({
-                decodedObjectName: 'token',
-                filename: 'nacl.json',
-                path: 'common',
-                // roleSearchPath:'role.group',
-                denyCallback: res => {
-                    return res.status(403).json({
-                        status: 'Access Denied',
-                        success: false,
-                        message: 'You are not authorized to access this resource'
-                    });
-                }
-            });
-
-            this.app.use(acl.authorize);
-            logger.info(`Worker ${process.pid}: [ACL]: Initialized`);
-        } catch (err) {
-            logger.error(err);
-        }
     }
 
     //Mongoose
@@ -147,41 +110,6 @@ class App {
         logger.info(`Worker ${process.pid}: Mongo DB is now connected`);
     }
 
-    //Passport
-    initPassport() {
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
-        require('./lib/passport/auth')(passport);
-
-        this.app.use((req, res, next) => {
-            const token = req.headers['token'];
-
-            if (token) {
-                jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
-                    if (err) {
-                        //check for admin token...
-                        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-                            if (err) {
-                                res.status(401);
-                                return res.send(err);
-                            }
-
-                            req.decoded = decoded;
-                            next();
-                        });
-                    }
-                    else {
-                        req.decoded = decoded;
-                        next();
-                    }
-                });
-            }
-            else {
-                next();
-            }
-        });
-    }
-
     //Controllers
     initControllers() {
         //Dynamically include controllers
@@ -190,18 +118,6 @@ class App {
                 require('./controllers/' + file).controller(this.app);
             }
         }.bind(this));
-    }
-
-    //Websocket
-    initSockets() {
-        try {
-            let websocket = require('./lib/websocket/websocket');
-            websocket.init(this.server);
-            this.websocket = websocket;
-            logger.info(`Worker ${process.pid}: [Websocket]: Initialized`);
-        } catch (err) {
-            logger.error(err);
-        }
     }
 
     //Logs
@@ -237,7 +153,6 @@ class App {
             logger.error(err);
         }
     }
-
 
     //State
     async onListening() {

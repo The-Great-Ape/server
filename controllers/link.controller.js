@@ -1,10 +1,8 @@
 const config = require('config'); // Website config
 const FormData = require('form-data');
 const fetch = require('node-fetch');
-const redis = require("redis");
 //const client = redis.createClient();
 const ed = require('noble-ed25519');
-const bs58 = require('bs58');
 const User = require('$schema/User.schema');
 
 class LinkController {
