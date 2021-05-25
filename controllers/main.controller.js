@@ -5,21 +5,32 @@ const fetch = require('node-fetch');
 const ed = require('noble-ed25519');
 const User = require('$schema/User.schema');
 
-class LinkController {
 
-    static async validateSignature(req, resp) {
-        let { token, signature, address, discordId } = req.body;
-        console.log(discordId);
+
+class MainController {
+    static async validateSignature(req, resp, next){
+        console.log(req.body);
+        let { token, signature, address } = req.body;
         address = Uint8Array.from(address.data);
         signature = Uint8Array.from(signature.data);
         token = new TextEncoder().encode(token);
         const isSigned = await ed.verify(signature, token, address);
-
+    
         if (isSigned) {
-            //let user = await User.addUser(discordId, address.toString('hex'));
-            resp.status(200).send(true);
+            next();
         }else{
             resp.status(500).send('Invalid signature');
+        }
+    }
+
+    static async login(req, resp) {
+        let { publicKey } = req.body;
+        
+        let user = await User.getUser(publicKey);
+        if (user) {
+            resp.status(200).send(user);
+        }else{
+            resp.status(500).send('Invalid address');
         }
     }
 
@@ -42,7 +53,7 @@ class LinkController {
         let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
         console.log(discordInfo);
-        resp.redirect(`http://localhost:3000` +
+        resp.redirect(`http://localhost:3000/settings` +
             `?token=${accessCode}` +
             `&avatar=${discordInfo.avatar}` +
             `&username=${discordInfo.username}` +
@@ -58,9 +69,9 @@ class LinkController {
     }
 }
 
-module.exports.Controller = LinkController;
+module.exports.Controller = MainController;
 module.exports.controller = function (app) {
-    app.post('/validate', LinkController.validateSignature);
-    app.get('/login', LinkController.discordLogin);
-    app.get('/login/callback', LinkController.discordCallback);
+    app.post('/login', MainController.validateSignature, MainController.login);
+    app.get('/discord', MainController.discordLogin);
+    app.get('/discord/callback', MainController.discordCallback);
 };

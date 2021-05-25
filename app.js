@@ -16,6 +16,7 @@ const mongoose = require('mongoose'),
     config = require('config'),
     util = require('./lib/util'),
     session = require('express-session'),
+    bodyParser = require('body-parser'),
     path = require('path');
 
 class App {
@@ -43,7 +44,7 @@ class App {
         this.app = express();
         this.port = this.port ? this.port : parseInt(config.PORT || 4000, 10);
         try {
-            //await this.initMongoose();
+            await this.initMongoose();
 
             this.server = this.app.listen(this.port);
             this.server.on('listening', this.onListening.bind(this));
@@ -79,6 +80,9 @@ class App {
             next();
         });
 
+        //Body parser
+        this.app.use(bodyParser());
+
         //Session
         this.app.use(session(config.session));
 
@@ -92,20 +96,20 @@ class App {
 
     //Mongoose
     async initMongoose() {
-        const url = process.env.MONGODB_URL || 'localhost:27017';
+        const url = process.env.MONGODB_URL || 'mongodb://localhost:27017/grape';
         const dbConfig = {
-            useUnifiedTopology: true,
-            retryWrites: false,
+            //useUnifiedTopology: true,
+            //retryWrites: false,
             useNewUrlParser: true,
-            useCreateIndex: true,
-            useFindAndModify: false,
-            socketTimeoutMS: 600000,
-            poolSize: 50
+            //useCreateIndex: true,
+            //useFindAndModify: false,
+            //socketTimeoutMS: 600000,
+            //poolSize: 50
         };
 
+        logger.info(`Worker ${process.pid}: Mongo DB is connecting to ${url}`);
         this.db = await mongoose.connect(url, dbConfig);
         this.db.close = mongoose.disconnect;
-        global.db = mongoose.connection.db;
 
         logger.info(`Worker ${process.pid}: Mongo DB is now connected`);
     }

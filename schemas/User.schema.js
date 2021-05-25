@@ -1,31 +1,23 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
-const GAME_TYPES = {
-    POKER: 'POKER'
-};
+const Wallet = require('./Wallet.schema');
 
 const userSchema = new Schema({
-    discordId: {
-        type: String,
-        required: true
-    },
-    solAddress: {
-        type: String,
-        required: true
-    },
-    matchHistory: [{
-        game: {
-            type: String,
-            enum: GAME_TYPES
-        },
-        place: {
-            type: Number
-        }
+    primaryWallet: String,
+    wallets: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Wallet'
     }],
-    rank: {
-        type: Number,
-    }
+    accounts: [{
+        discordId: {
+            type: String,
+            required: false
+        },
+        twitterId: {
+            type: String,
+            required: false
+        }
+    }]
 },
     {
         timestamps: true,
@@ -34,26 +26,40 @@ const userSchema = new Schema({
     });
 
 class User {
-    static async addUser(discordId, solAddress) {
-        console.log(discordId, solAddress);
-        if (discordId && solAddress) {
-            await this.findOneAndUpdate(
-                { discordId },
-                { $set: { discordId, solAddress } },
-                { upsert: true, new: true }
-              );
+    static async createUser(primaryWallet, type) {
+        if (primaryWallet) {
+            let user = await this.create(
+                { primaryWallet }
+            );
+
+            if (user) {
+                let wallet = await Wallet.create({
+                    publicKey: primaryWallet,
+                    userId: user._id,
+                    name: 'Primary',
+                    type: type
+                });
+
+                user.wallets = [wallet];
+                await user.save();
+            }
+
+            return user;
         }
     }
 
-    static async recordMatch(match) {
-        let { userId, game, place } = match;
+    static async getUser(primaryWallet) {
+        console.log(primaryWallet);
+        if (primaryWallet) {
+            let user = await this.findOne(
+                { primaryWallet }
+            );
 
-        if (userId && game && place) {
-            await this.update({ _id: userId }, {
-                $push: {
-                    matchHistory: { game, place }
-                }
-            })
+            if (!user) {
+                let user = await User.createUser(primaryWallet, 'SOLLET');
+            }
+
+            return user;
         }
     }
 }
