@@ -80,8 +80,8 @@ class App {
             next();
         });
 
-        //Body parser
-        this.app.use(bodyParser());
+        app.use(express.urlencoded({ extended: true }));
+        app.use(express.json());
 
         //Session
         this.app.use(session(config.session));

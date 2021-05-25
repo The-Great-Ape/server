@@ -1,0 +1,38 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+    },
+    "env": {
+        "es6":     true,
+        "node":    true,
+        "mocha":   true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "parser": "babel-eslint",
+    "rules": {
+        "indent": ["error", 4, {"SwitchCase": 1}],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "no-console": "warn",
+        "no-trailing-spaces": "error",
+        "no-return-await": "error",
+        "no-multiple-empty-lines": "error",
+        "no-unused-vars": "warn",
+        "eqeqeq": ["error", "always"],
+        "space-before-function-paren": ["error", {
+            "anonymous": "always",
+            "named": "ignore",
+            "asyncArrow": "always"
+        }],
+        "space-before-blocks": ["error", "always"],
+        "keyword-spacing": ["error", { "before": true }],
+        "no-unused-expressions": "error",
+        "array-callback-return": "error",
+        "no-useless-constructor": "error",
+        "radix": "error"
+    }
+}
