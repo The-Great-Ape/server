@@ -1,11 +1,8 @@
-const config = require('config'); // Website config
-const FormData = require('form-data');
-const fetch = require('node-fetch');
-//const client = redis.createClient();
-const ed = require('noble-ed25519');
-const User = require('$schema/User.schema');
-
-
+import config from 'config';
+import FormData from 'form-data';
+import fetch from 'node-fetch';
+import ed from 'noble-ed25519';
+import UserSession from '../models/UserSession.js';
 
 class MainController {
     static async validateSignature(req, resp, next){
@@ -13,9 +10,11 @@ class MainController {
         let { token, signature, address } = req.body;
         address = Uint8Array.from(address.data);
         signature = Uint8Array.from(signature.data);
-        token = new TextEncoder().encode(token);
+        token = new TextEncoder().encode('helloworld');
         const isSigned = await ed.verify(signature, token, address);
-    
+        
+        console.log({isSigned});
+
         if (isSigned) {
             next();
         }else{
@@ -26,7 +25,7 @@ class MainController {
     static async login(req, resp) {
         let { publicKey } = req.body;
         
-        let user = await User.getUser(publicKey);
+        let user = await UserSession.getByAddress(publicKey);
         if (user) {
             resp.status(200).send(user);
         }else{
@@ -35,7 +34,7 @@ class MainController {
     }
 
     static async discordCallback(req, resp) {
-        const accessCode = req.query.code;
+        const userId = req.query.userId;
         if (!accessCode) // If something went wrong and access code wasn't given
             return resp.send('No access code specified');
 
@@ -46,16 +45,19 @@ class MainController {
         data.append('grant_type', 'authorization_code');
         data.append('redirect_uri', config.oauth2.redirect_uri);
         data.append('scope', 'identify');
-        data.append('code', accessCode);
 
         // Making request to oauth2/token to get the Bearer token
         const json = await (await fetch('https://discord.com/api/oauth2/token', { method: 'POST', body: data })).json();
         let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
         console.log(discordInfo);
-        resp.redirect(`http://localhost:3000/settings` +
-            `?token=${accessCode}` +
-            `&avatar=${discordInfo.avatar}` +
+        
+        let user = await User.getById(userId);
+        user.discordId = discordInfo.id;
+        await user.save();
+        
+        resp.redirect(`http://localhost:3000/confirmation` +
+            `?avatar=${discordInfo.avatar}` +
             `&username=${discordInfo.username}` +
             `&discord_id=${discordInfo.id}`);
     }
@@ -67,11 +69,12 @@ class MainController {
             `&redirect_uri=${encodeURIComponent(config.oauth2.redirect_uri)}` +
             `&response_type=code&scope=${encodeURIComponent(config.oauth2.scopes.join(" "))}`)
     }
+
+    static addRoutes(app) {
+        app.post('/login', MainController.validateSignature, MainController.login);
+        app.get('/discord', MainController.discordLogin);
+        app.get('/discord/callback', MainController.discordCallback);
+    }
 }
 
-module.exports.Controller = MainController;
-module.exports.controller = function (app) {
-    app.post('/login', MainController.validateSignature, MainController.login);
-    app.get('/discord', MainController.discordLogin);
-    app.get('/discord/callback', MainController.discordCallback);
-};
+export default MainController;

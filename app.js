@@ -1,26 +1,31 @@
 /*-------------
 Dependencies
 ---------------*/
-require('dotenv').config();
-require('module-alias/register');
 
-const mongoose = require('mongoose'),
-    fs = require('fs'),
-    cors = require('cors'),
-    express = require('express'),
-    walkDir = require('walkdir'),
-    logger = require('./lib/logger'),
-    morgan = require('morgan'),
-    helmet = require('helmet'),
-    compression = require('compression'),
-    config = require('config'),
-    util = require('./lib/util'),
-    session = require('express-session'),
-    bodyParser = require('body-parser'),
-    path = require('path');
+//modules
+import dotenv from 'dotenv';
+import fs from 'fs';
+import cors from 'cors';
+import express from 'express';
+import morgan from 'morgan';
+import helmet from 'helmet';
+import config from 'config';
+import session from 'express-session';
+import bodyParser from 'body-parser';
+
+//lib
+import util from './lib/util.js';
+import db from './lib/db.js';
+import logger from './lib/logger.js';
+import UserSession from './models/UserSession.js';
+
+//controllers
+import MainController from './controllers/main.controller.js';
 
 class App {
     constructor(port) {
+        dotenv.config();
+
         //props
         this.port = port || null;
 
@@ -28,7 +33,7 @@ class App {
         this.server = null;
         this.db = null;
         this.websocket = null;
-
+        
         //states
         this.isClosing = false;
     }
@@ -44,7 +49,7 @@ class App {
         this.app = express();
         this.port = this.port ? this.port : parseInt(config.PORT || 4000, 10);
         try {
-            await this.initMongoose();
+            await this.initDB();
 
             this.server = this.app.listen(this.port);
             this.server.on('listening', this.onListening.bind(this));
@@ -65,9 +70,6 @@ class App {
         //Helmet - simple security headers
         this.app.use(helmet());
 
-        //use GZip
-        this.app.use(compression());
-
         //Default No Cache
         this.app.use((req, res, next) => {
             res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -80,8 +82,8 @@ class App {
             next();
         });
 
-        app.use(express.urlencoded({ extended: true }));
-        app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(express.json());
 
         //Session
         this.app.use(session(config.session));
@@ -95,33 +97,18 @@ class App {
     }
 
     //Mongoose
-    async initMongoose() {
-        const url = process.env.MONGODB_URL || 'mongodb://localhost:27017/grape';
-        const dbConfig = {
-            //useUnifiedTopology: true,
-            //retryWrites: false,
-            useNewUrlParser: true,
-            //useCreateIndex: true,
-            //useFindAndModify: false,
-            //socketTimeoutMS: 600000,
-            //poolSize: 50
-        };
+    async initDB() {
+        await db.connect();
+       
+        let result = await UserSession.getByAddress('CCLtafzdeuWCwyYGDEfqEyUxA3tsJrTbPTSPLV36pxop');
+        console.log(result);
 
-        logger.info(`Worker ${process.pid}: Mongo DB is connecting to ${url}`);
-        this.db = await mongoose.connect(url, dbConfig);
-        this.db.close = mongoose.disconnect;
-
-        logger.info(`Worker ${process.pid}: Mongo DB is now connected`);
+        logger.info(`Worker ${process.pid}: [Postgres]: Connected.`);
     }
 
     //Controllers
     initControllers() {
-        //Dynamically include controllers
-        fs.readdirSync('./controllers').forEach(function (file) {
-            if (file.substr(-3) === '.js' && file.substr(-7) !== 'spec.js') {
-                require('./controllers/' + file).controller(this.app);
-            }
-        }.bind(this));
+       MainController.addRoutes(this.app);
     }
 
     //Logs
@@ -138,26 +125,6 @@ class App {
         );
     }
 
-    //Schemas
-    async initSchemas() {
-        //Dynamically register mongoose schemas to be used without model requires
-        try {
-            const schemasLocation = './schemas/';
-            const schemasDir = path.join(__dirname, schemasLocation);
-            const files = walkDir.sync(schemasDir);
-
-            if (Array.isArray(files)) {
-                files.forEach(filepath => {
-                    if (filepath.match(/\.schema\.js$/)) require(filepath);
-                });
-            }
-
-            logger.info(`Worker ${process.pid}: [Schemas]: Initialized`);
-        } catch (err) {
-            logger.error(err);
-        }
-    }
-
     //State
     async onListening() {
         this.initLogs();
@@ -165,11 +132,6 @@ class App {
         logger.info(`Worker ${process.pid}: Listening on port ${this.port}, in ${process.env.NODE_ENV}`);
 
         this.initCORS();
-        //this.initPassport();
-        //this.initSockets();
-        //await this.initACL();
-
-        this.initSchemas();
         this.initExpress();
         this.initControllers();
 
@@ -187,7 +149,7 @@ class App {
                 if (err) {
                     this.onError(err);
                 } else {
-                    logger.info(`Worker ${process.pid}: MongoDB connection closed.`);
+                    logger.info(`Worker ${process.pid}: [Postgres]: Connection closed.`);
                 }
             });
         }
