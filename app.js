@@ -99,10 +99,6 @@ class App {
     //Mongoose
     async initDB() {
         await db.connect();
-       
-        let result = await UserSession.getByAddress('CCLtafzdeuWCwyYGDEfqEyUxA3tsJrTbPTSPLV36pxop');
-        console.log(result);
-
         logger.info(`Worker ${process.pid}: [Postgres]: Connected.`);
     }
 
