@@ -25,7 +25,7 @@ class User {
     }
 
     async save(){
-        const text = 'UPDATE users SET discordId = $2 WHERE user_id = $1';
+        const text = 'UPDATE users SET discord_id = $2 WHERE user_id = $1';
         const values = [this.userId, this.discordId];
         let response = await db.client.query(text,values);
     }
