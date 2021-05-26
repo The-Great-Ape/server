@@ -49,7 +49,6 @@ class User {
     }
 
     static async getUser(primaryWallet) {
-        console.log(primaryWallet);
         if (primaryWallet) {
             let user = await this.findOne(
                 { primaryWallet }

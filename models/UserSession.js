@@ -9,7 +9,19 @@ class UserSession {
 
         if(userWallet){
             user = await User.getById(userWallet.userId);
+            return {
+                ...user,
+                wallets: [userWallet]
+            }
+        }else{
+            return UserSession.createUserSession(address);
         }
+    }
+
+    static async createUserSession(address){
+        
+        let user = await User.createUser();
+        let userWallet = await UserWallet.createUserWallet(user.userId, address);
 
         return {
             ...user,

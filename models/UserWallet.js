@@ -15,6 +15,20 @@ class UserWallet {
         const values = [address];
         let response = await db.client.query(text, values);
         response = response.rows && response.rows[0];
+
+        if(response){
+            return new UserWallet(response);
+        }
+
+        return null;
+    }
+
+    static async createUserWallet(userId, address){
+        const text = 'INSERT INTO user_wallets(user_id, address) VALUES($1, $2) RETURNING *';
+        const values = [userId, address];
+        
+        let response = await db.client.query(text, values);
+        response = response.rows && response.rows[0];
         return new UserWallet(response);
     }
 }

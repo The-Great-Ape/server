@@ -3,32 +3,30 @@ import FormData from 'form-data';
 import fetch from 'node-fetch';
 import ed from 'noble-ed25519';
 import UserSession from '../models/UserSession.js';
+import { User } from 'discord.js';
 
 class MainController {
-    static async validateSignature(req, resp, next){
-        console.log(req.body);
+    static async validateSignature(req, resp, next) {
         let { token, signature, address } = req.body;
         address = Uint8Array.from(address.data);
         signature = Uint8Array.from(signature.data);
         token = new TextEncoder().encode('helloworld');
         const isSigned = await ed.verify(signature, token, address);
-        
-        console.log({isSigned});
 
         if (isSigned) {
             next();
-        }else{
+        } else {
             resp.status(500).send('Invalid signature');
         }
     }
 
     static async login(req, resp) {
         let { publicKey } = req.body;
-        
+
         let user = await UserSession.getByAddress(publicKey);
         if (user) {
             resp.status(200).send(user);
-        }else{
+        } else {
             resp.status(500).send('Invalid address');
         }
     }
@@ -50,12 +48,11 @@ class MainController {
         const json = await (await fetch('https://discord.com/api/oauth2/token', { method: 'POST', body: data })).json();
         let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
-        console.log(discordInfo);
-        
+
         let user = await User.getById(userId);
         user.discordId = discordInfo.id;
         await user.save();
-        
+
         resp.redirect(`http://localhost:3000/confirmation` +
             `?avatar=${discordInfo.avatar}` +
             `&username=${discordInfo.username}` +
