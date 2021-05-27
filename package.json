@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "start": "nodemon app.js",
+        "bot": "node lib/bot.js",
         "script": "node ./script/script-app.js"
     },
     "_moduleAliases": {
