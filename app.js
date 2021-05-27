@@ -5,14 +5,12 @@ Dependencies
 //modules
 import "dotenv/config.js";
 
-import fs from 'fs';
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import config from 'config';
 import session from 'express-session';
-import bodyParser from 'body-parser';
 
 //lib
 import util from './lib/util.js';
@@ -32,7 +30,7 @@ class App {
         this.server = null;
         this.db = null;
         this.websocket = null;
-        
+
         //states
         this.isClosing = false;
     }
