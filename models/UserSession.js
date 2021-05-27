@@ -35,7 +35,7 @@ class UserSession {
         return {
             ...user,
             wallets: [userWallet],
-            servers: [userServer]
+            // servers: [userServer]
         }
     }
 }
