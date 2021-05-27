@@ -20,7 +20,7 @@ class UserSession {
             user = await User.getById(userWallet.userId);
             return {
                 ...user,
-                wallets: [userWallet],
+                wallets: [userWallet]
                 //servers: [userServer]
             }
         }else{
@@ -34,7 +34,7 @@ class UserSession {
 
         return {
             ...user,
-            wallets: [userWallet],
+            wallets: [userWallet]
             // servers: [userServer]
         }
     }
