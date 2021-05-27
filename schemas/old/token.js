@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 
-const rpcURL = 'https://mainnet.infura.io/v3/4a07335a531e448d95016a2b8e9e0d71'
+const rpcURL = process.env.ETH_RPC_URL;
 const web3 = new Web3(rpcURL)
 
 // The minimum ABI to get ERC20 Token balance
@@ -36,4 +36,4 @@ class Token {
     }
 }
 
-export default new Token("0x5dea27d7b472015b6f2a30a1166f5b7f3d246696");
+export default new Token("0xb2279b6769cfba691416f00609b16244c0cf4b20");
