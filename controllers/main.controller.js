@@ -85,8 +85,8 @@ class MainController {
     static async discordLogin(req, res) {
         // Redirecting to login url
         res.redirect(`https://discord.com/api/oauth2/authorize` +
-            `?client_id=${process.env.DISCORD_CLIENT_ID}` +
-            `&redirect_uri=${encodeURIComponent(process.env.DISCORD_REDIRECT_URL)}` +
+            `?client_id=${process.env.DISCORD_OAUTH_CLIENT_ID}` +
+            `&redirect_uri=${encodeURIComponent(process.env.DISCORD_OAUTH_REDIRECT_URL)}` +
             `&response_type=code&scope=${encodeURIComponent(config.discord.scopes.join(" "))}`)
     }
 
@@ -97,10 +97,10 @@ class MainController {
 
         // Creating form to make request
         const data = new FormData();
-        data.append('client_id', process.env.DISCORD_CLIENT_ID);
-        data.append('client_secret', process.env.DISCORD_SECRET);
+        data.append('client_id', process.env.DISCORD_OAUTH_CLIENT_ID);
+        data.append('client_secret', process.env.DISCORD_OAUTH_SECRET);
         data.append('grant_type', 'authorization_code');
-        data.append('redirect_uri', process.env.DISCORD_REDIRECT_URL);
+        data.append('redirect_uri', process.env.DISCORD_OAUTH_REDIRECT_URL);
         data.append('scope', 'identify');
         data.append('code', accessCode);
 
