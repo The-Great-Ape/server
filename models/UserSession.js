@@ -1,4 +1,5 @@
 import User from './User.js';
+import UserServer from './UserServer.js';
 import UserWallet from './UserWallet.js';
 
 class UserSession {
@@ -18,14 +19,19 @@ class UserSession {
         }
     }
 
-    static async createUserSession(address){
-        
+    static async createUserSession(address, serverId){
         let user = await User.createUser();
         let userWallet = await UserWallet.createUserWallet(user.userId, address);
+        let userServer;
 
+        if(serverId){
+            userServer = await UserServer.createrUserServer(user.userId, serverId);
+        }
+        
         return {
             ...user,
-            wallets: [userWallet]
+            wallets: [userWallet],
+            servers: [userServer]
         }
     }
 }

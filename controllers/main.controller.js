@@ -6,6 +6,7 @@ import UserSession from '../models/UserSession.js';
 import User from '../models/User.js';
 
 class MainController {
+    //Validate Signature
     static async validateSignature(req, resp, next) {
         let { token, signature, address } = req.body;
         address = Uint8Array.from(address.data);
@@ -19,7 +20,8 @@ class MainController {
             resp.status(500).send('Invalid signature');
         }
     }
-
+    
+    //Login
     static async login(req, resp) {
         let { publicKey } = req.body;
 
@@ -31,6 +33,7 @@ class MainController {
         }
     }
 
+    //Update User
     static async updateUser(req, resp){
         const discordId = req.body.discordId;
         const userId = req.params.userId;
@@ -44,6 +47,47 @@ class MainController {
         } else {
             resp.status(500).send('Invalid address');
         }
+    }
+
+    //Register Server
+    static async registerServer(req, resp){
+        const serverId = req.body.serverId;
+        const userId = req.params.userId;
+
+        let user = await User.getById(userId);
+        user.discordId = discordId;
+        await user.save();
+
+        if (user) {
+            resp.status(200).send(user);
+        } else {
+            resp.status(500).send('Invalid address');
+        }
+    }
+
+    //Unregister Server
+    static async unregisterServer(req, resp){
+        const discordId = req.body.discordId;
+        const userId = req.params.userId;
+
+        let user = await User.getById(userId);
+        user.discordId = discordId;
+        await user.save();
+
+        if (user) {
+            resp.status(200).send(user);
+        } else {
+            resp.status(500).send('Invalid address');
+        }
+    }
+
+    //Discord
+    static async discordLogin(req, res) {
+        // Redirecting to login url
+        res.redirect(`https://discord.com/api/oauth2/authorize` +
+            `?client_id=${config.oauth2.client_id}` +
+            `&redirect_uri=${encodeURIComponent(config.oauth2.redirect_uri)}` +
+            `&response_type=code&scope=${encodeURIComponent(config.oauth2.scopes.join(" "))}`)
     }
 
     static async discordCallback(req, resp) {
@@ -74,17 +118,11 @@ class MainController {
             `#/confirmation`);
     }
 
-    static async discordLogin(req, res) {
-        // Redirecting to login url
-        res.redirect(`https://discord.com/api/oauth2/authorize` +
-            `?client_id=${config.oauth2.client_id}` +
-            `&redirect_uri=${encodeURIComponent(config.oauth2.redirect_uri)}` +
-            `&response_type=code&scope=${encodeURIComponent(config.oauth2.scopes.join(" "))}`)
-    }
-
     static addRoutes(app) {
         app.put('/user/:userId', MainController.validateSignature, MainController.updateUser);
         app.post('/login', MainController.validateSignature, MainController.login);
+        app.put('/server/:serverId/:userId',MainController.validateSignature, MainController.registerServer);
+        app.delete('/server/:serverId/:userId',MainController.validateSignature, MainController.unregisterServer);
         app.get('/discord', MainController.discordLogin);
         app.get('/discord/callback', MainController.discordCallback);
     }
