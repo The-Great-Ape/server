@@ -87,7 +87,7 @@ class MainController {
         res.redirect(`https://discord.com/api/oauth2/authorize` +
             `?client_id=${process.env.DISCORD_CLIENT_ID}` +
             `&redirect_uri=${encodeURIComponent(process.env.DISCORD_REDIRECT_URL)}` +
-            `&response_type=code&scope=${encodeURIComponent(config.oauth2.scopes.join(" "))}`)
+            `&response_type=code&scope=${encodeURIComponent(config.discord.scopes.join(" "))}`)
     }
 
     static async discordCallback(req, resp) {
@@ -108,7 +108,7 @@ class MainController {
         const json = await (await fetch('https://discord.com/api/oauth2/token', { method: 'POST', body: data })).json();
         let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
-        console.log(discordInfo);
+
         resp.redirect(process.env.CLIENT_URL +
             `?token=${accessCode}` +
             `&avatar=${discordInfo.avatar}` +
