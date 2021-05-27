@@ -3,7 +3,8 @@ Dependencies
 ---------------*/
 
 //modules
-import dotenv from 'dotenv';
+import "dotenv/config.js";
+
 import fs from 'fs';
 import cors from 'cors';
 import express from 'express';
@@ -24,8 +25,6 @@ import MainController from './controllers/main.controller.js';
 
 class App {
     constructor(port) {
-        dotenv.config();
-
         //props
         this.port = port || null;
 

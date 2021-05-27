@@ -4,6 +4,14 @@ import UserWallet from './UserWallet.js';
 
 class UserSession {
 
+    static async register(address, serverId){
+        let user = UserSession.getByAddress(address);
+
+        if(serverId){
+            userServer = await UserServer.createUserServer(user.userId, serverId);
+        }
+    }
+
     static async getByAddress(address){
         let userWallet = await UserWallet.getByAddress(address);
         let user;
@@ -12,22 +20,18 @@ class UserSession {
             user = await User.getById(userWallet.userId);
             return {
                 ...user,
-                wallets: [userWallet]
+                wallets: [userWallet],
+                //servers: [userServer]
             }
         }else{
             return UserSession.createUserSession(address);
         }
     }
 
-    static async createUserSession(address, serverId){
+    static async createUserSession(address){
         let user = await User.createUser();
         let userWallet = await UserWallet.createUserWallet(user.userId, address);
-        let userServer;
 
-        if(serverId){
-            userServer = await UserServer.createrUserServer(user.userId, serverId);
-        }
-        
         return {
             ...user,
             wallets: [userWallet],

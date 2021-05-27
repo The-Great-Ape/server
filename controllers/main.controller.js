@@ -85,8 +85,8 @@ class MainController {
     static async discordLogin(req, res) {
         // Redirecting to login url
         res.redirect(`https://discord.com/api/oauth2/authorize` +
-            `?client_id=${config.oauth2.client_id}` +
-            `&redirect_uri=${encodeURIComponent(config.oauth2.redirect_uri)}` +
+            `?client_id=${process.env.DISCORD_CLIENT_ID}` +
+            `&redirect_uri=${encodeURIComponent(process.env.DISCORD_REDIRECT_URL)}` +
             `&response_type=code&scope=${encodeURIComponent(config.oauth2.scopes.join(" "))}`)
     }
 
@@ -97,10 +97,10 @@ class MainController {
 
         // Creating form to make request
         const data = new FormData();
-        data.append('client_id', config.oauth2.client_id);
-        data.append('client_secret', config.oauth2.secret);
+        data.append('client_id', process.env.DISCORD_CLIENT_ID);
+        data.append('client_secret', process.env.DISCORD_SECRET);
         data.append('grant_type', 'authorization_code');
-        data.append('redirect_uri', config.oauth2.redirect_uri);
+        data.append('redirect_uri', process.env.DISCORD_REDIRECT_URL);
         data.append('scope', 'identify');
         data.append('code', accessCode);
 
@@ -109,7 +109,7 @@ class MainController {
         let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
         console.log(discordInfo);
-        resp.redirect(`http://localhost:3000/` +
+        resp.redirect(process.env.CLIENT_URL +
             `?token=${accessCode}` +
             `&avatar=${discordInfo.avatar}` +
             `&username=${discordInfo.username}` +

@@ -3,7 +3,7 @@
     "version": "6.29.0",
     "private": true,
     "scripts": {
-        "start": "nodemon ./app.js",
+        "start": "nodemon app.js",
         "script": "node ./script/script-app.js"
     },
     "_moduleAliases": {

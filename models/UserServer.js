@@ -22,6 +22,13 @@ class UserServer {
         let response = await db.client.query(text, values);
         return response;
     }
+
+    static async getUserServers(userId){
+        const text = 'SELECT * user_servers WHERE user_id = $1';
+        const values = [userId];
+        let response = await db.client.query(text, values);
+        return response;
+    }
 }
 
 export default UserServer;
