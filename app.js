@@ -95,7 +95,7 @@ class App {
 
     //Mongoose
     async initDB() {
-        await db.connect();
+        //await db.connect();
         logger.info(`Worker ${process.pid}: [Postgres]: Connected.`);
     }
 

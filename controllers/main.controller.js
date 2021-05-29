@@ -115,7 +115,6 @@ class MainController {
         const json = await (await fetch('https://discord.com/api/oauth2/token', { method: 'POST', body: data })).json();
         let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
-        console.log(discordInfo);
 
         resp.redirect(process.env.CLIENT_URL +
             `?token=${accessCode}` +

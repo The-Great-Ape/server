@@ -13,8 +13,8 @@ class UserWallet {
     static async getByAddress(address){
         const text = 'SELECT * FROM user_wallets WHERE address = $1';
         const values = [address];
-        let response = await db.client.query(text, values);
-        response = response.rows && response.rows[0];
+        let response = await db.query(text, values);
+        response = response[0];
 
         if(response){
             return new UserWallet(response);
@@ -27,8 +27,8 @@ class UserWallet {
         const text = 'INSERT INTO user_wallets(user_id, address) VALUES($1, $2) RETURNING *';
         const values = [userId, address];
         
-        let response = await db.client.query(text, values);
-        response = response.rows && response.rows[0];
+        let response = await db.query(text, values);
+        response = response[0];
         return new UserWallet(response);
     }
 }

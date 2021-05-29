@@ -11,24 +11,22 @@ class UserServer {
         const text = 'INSERT INTO user_servers(user_id, server_id) VALUES($1,$2) RETURNING *';
         const values = [userId, serverId];
         
-        let response = await db.client.query(text, values);
-        response = response.rows && response.rows[0];
+        let response = await db.query(text, values);
+        response = response[0];
         return new UserServer(response);
     }
 
     static async deleteUserServer(userId, serverId){
         const text = 'DELETE FROM user_servers WHERE user_id = $1 AND server_id = $2';
         const values = [userId, serverId];
-        let response = await db.client.query(text, values);
+        let response = await db.query(text, values);
         return response;
     }
 
     static async getUserServers(userId){
         const text = 'SELECT * FROM user_servers WHERE user_id = $1';
-        console.log(text, userId);
         const values = [userId];
-        let response = await db.client.query(text, values);
-        response = response.rows;
+        let response = await db.query(text, values);
         return response;
     }
 }
