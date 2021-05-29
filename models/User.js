@@ -5,6 +5,8 @@ class User {
         this.userId = data.user_id;
         this.discordId = data.discord_id;
         this.twitterId = data.twitter_id;
+        this.botToken = data.bottoken;
+
     }
 
     static async createUser(discordId){
