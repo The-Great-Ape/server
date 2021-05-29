@@ -7,17 +7,6 @@ class User {
         this.twitterId = data.twitter_id;
     }
 
-    static async createTable(){
-        const text = `
-        CREATE TABLE users (
-            user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-            discord_id VARCHAR (32),
-            twitter_id VARCHAR (32),
-        `;
-        let response = await db.client.query(text);
-        return response;
-    }
-
     static async createUser(discordId){
         const text = 'INSERT INTO users(discord_id) VALUES($1) RETURNING *';
         const values = [discordId || null];

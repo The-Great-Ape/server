@@ -10,20 +10,6 @@ class UserWallet {
         this.isPrimary = data.is_primary;
     }
     
-    static async createTable(){
-        const text = `
-        CREATE TABLE user_wallets (
-            user_wallet_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-            user_id UUID,
-            addresss VARCHAR (64) NOT NULL,
-            network_id UUID,
-            provider_id UUID
-            is_primary BOOLEAN
-        `;
-        let response = await db.client.query(text);
-        return response;
-    }
-
     static async getByAddress(address){
         const text = 'SELECT * FROM user_wallets WHERE address = $1';
         const values = [address];

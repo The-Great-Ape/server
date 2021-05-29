@@ -24,9 +24,11 @@ class UserServer {
     }
 
     static async getUserServers(userId){
-        const text = 'SELECT * user_servers WHERE user_id = $1';
+        const text = 'SELECT * FROM user_servers WHERE user_id = $1';
+        console.log(text, userId);
         const values = [userId];
         let response = await db.client.query(text, values);
+        response = response.rows;
         return response;
     }
 }
