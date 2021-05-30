@@ -3,7 +3,7 @@ Dependencies
 ---------------*/
 
 //modules
-import "dotenv/config.js";
+import 'dotenv/config.js';
 
 import cors from 'cors';
 import express from 'express';
@@ -101,7 +101,7 @@ class App {
 
     //Controllers
     initControllers() {
-       MainController.addRoutes(this.app);
+        MainController.addRoutes(this.app);
     }
 
     //Logs
