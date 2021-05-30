@@ -126,13 +126,13 @@ class MainController {
     }
 
     static addRoutes(app) {
-        app.put('/user/:userId', MainController.validateSignature, MainController.updateUser);
-        app.post('/login', MainController.validateSignature, MainController.login);
-        app.get('/server', MainController.validateSignature, MainController.getServers);
-        app.put('/server/:serverId/user/:userId', MainController.validateSignature, MainController.registerServer);
-        app.delete('/server/:serverId/user/:userId', MainController.validateSignature, MainController.unregisterServer);
-        app.get('/discord', MainController.discordLogin);
-        app.get('/discord/callback', MainController.discordCallback);
+        app.put('/api/user/:userId', MainController.validateSignature, MainController.updateUser);
+        app.post('/api/login', MainController.validateSignature, MainController.login);
+        app.get('/api/server', MainController.validateSignature, MainController.getServers);
+        app.put('/api/server/:serverId/user/:userId', MainController.validateSignature, MainController.registerServer);
+        app.delete('/api/server/:serverId/user/:userId', MainController.validateSignature, MainController.unregisterServer);
+        app.get('/api/discord', MainController.discordLogin);
+        app.get('/api/discord/callback', MainController.discordCallback);
     }
 }
 
