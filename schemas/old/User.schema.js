@@ -19,11 +19,11 @@ const userSchema = new Schema({
         }
     }]
 },
-    {
-        timestamps: true,
-        toObject: { virtuals: true },
-        toJSON: { virtuals: true }
-    });
+{
+    timestamps: true,
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true }
+});
 
 class User {
     static async createUser(primaryWallet, type) {

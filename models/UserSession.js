@@ -5,22 +5,22 @@ import UserWallet from './UserWallet.js';
 
 class UserSession {
 
-    static async register(address, serverId){
+    static async register(address, serverId) {
         let user = UserSession.getByAddress(address);
 
-        if(serverId){
-            userServer = await UserServer.createUserServer(user.userId, serverId);
+        if (serverId) {
+            await UserServer.createUserServer(user.userId, serverId);
         }
     }
 
-    static async getByAddress(address){
+    static async getByAddress(address) {
         let userWallet = await UserWallet.getByAddress(address);
-        let userId = userWallet.userId
+        let userId = userWallet.userId;
         let user, userServers;
 
-        if(userWallet){
+        if (userWallet) {
             user = await User.getById(userId);
-            userServers = await UserServer.getUserServers(userId)
+            userServers = await UserServer.getUserServers(userId);
             let servers = await Server.getServers();
 
             return {
@@ -28,13 +28,13 @@ class UserSession {
                 wallets: [userWallet],
                 userServers: [userServers],
                 servers
-            }
-        }else{
+            };
+        } else {
             return UserSession.createUserSession(address);
         }
     }
 
-    static async createUserSession(address){
+    static async createUserSession(address) {
         let user = await User.createUser();
         let userWallet = await UserWallet.createUserWallet(user.userId, address);
         let servers = await Server.getServers();
@@ -44,7 +44,7 @@ class UserSession {
             wallets: [userWallet],
             userServers: [],
             servers
-        }
+        };
     }
 }
 
