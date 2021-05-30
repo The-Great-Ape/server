@@ -25,10 +25,25 @@ class User {
         return new User(response);
     }
 
+    static async getByDiscordId(discordId) {
+        try {
+            const text = 'SELECT discord_id FROM users WHERE discord_id = $1';
+            const values = [discordId];
+            let response = await db.query(text, values);
+            response = response[0];
+            if (response)
+                return response.discord_id;
+
+            return 0;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     async save() {
         const text = 'UPDATE users SET discord_id = $2 WHERE user_id = $1';
         const values = [this.userId, this.discordId];
-        let response = await db.query(text,values);
+        let response = await db.query(text, values);
     }
 }
 

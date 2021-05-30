@@ -50,7 +50,7 @@ class Aggregator {
                 description: 'test',
                 interval: Aggregator.EVERY_DAY,
                 run: async () => {
-                    console.log('test')
+                    console.log('test');
                 }
             }
         ];
@@ -74,7 +74,7 @@ class Aggregator {
 
             for (let i = 0; i < Aggregator.tasks.length; i++) {
                 let task = Aggregator.tasks[i];
-                task = await AggregatorTask.createTask(task);
+                task = await Task.createTask(task);
                 let job = this.schedule(task);
                 this.jobs.push(job);
             }

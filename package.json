@@ -4,21 +4,25 @@
     "private": true,
     "scripts": {
         "start": "nodemon app.js",
-        "bot": "node lib/bot.js",
+        "bot": "node --experimental-specifier-resolution=node modules/discord-bot/bot.js",
         "script": "node ./script/script-app.js"
     },
     "_moduleAliases": {
         "$lib": "./lib",
-        "$schema": "./schemas"
+        "$schema": "./schemas",
+        "@model": "models"
     },
     "type": "module",
     "dependencies": {
+        "@solana/web3.js": "^1.15.0",
         "axios": "^0.21.1",
+        "bip39": "^3.0.4",
         "body-parser": "^1.19.0",
         "bs58": "^4.0.1",
         "compression": "^1.7.4",
         "config": "^3.0.1",
         "cors": "^2.8.3",
+        "crypto-js": "^4.0.0",
         "discord.js": "^12.5.3",
         "dotenv": "^10.0.0",
         "express": "^4.16.3",
@@ -27,6 +31,7 @@
         "form-data": "^4.0.0",
         "helmet": "^4.6.0",
         "jsonwebtoken": "^8.5.1",
+        "keyv": "^3.1.0",
         "lodash": "^4.17.19",
         "mkpath": "^1.0.0",
         "module-alias": "^2.2.0",
