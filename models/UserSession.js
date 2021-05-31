@@ -15,13 +15,15 @@ class UserSession {
 
     static async getByAddress(address) {
         let userWallet = await UserWallet.getByAddress(address);
-        let userId = userWallet.userId;
-        let user, userServers;
+        
 
         if (userWallet) {
+	        let userId = userWallet.userId;
+			let user, userServers;
             user = await User.getById(userId);
             userServers = await UserServer.getUserServers(userId);
             let servers = await Server.getServers();
+            
 
             return {
                 ...user,
@@ -30,6 +32,7 @@ class UserSession {
                 servers
             };
         } else {
+
             return UserSession.createUserSession(address);
         }
     }
