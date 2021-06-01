@@ -1,5 +1,10 @@
 {
     "port": "4000",
+    "discord": {
+        "scopes": [
+            "identify"
+        ]
+    },
     "session": {
         "secret": "youshall",
         "cookie": {
