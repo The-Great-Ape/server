@@ -1,51 +1,90 @@
 {
-    "name": "api",
-    "version": "6.29.0",
-    "private": true,
-    "scripts": {
-        "start": "nodemon app.js",
-        "bot": "node lib/bot.js",
-        "script": "node ./script/script-app.js"
-    },
-    "_moduleAliases": {
-        "$lib": "./lib",
-        "$schema": "./schemas"
-    },
-    "type": "module",
-    "dependencies": {
-        "axios": "^0.21.1",
-        "body-parser": "^1.19.0",
-        "bs58": "^4.0.1",
-        "compression": "^1.7.4",
-        "config": "^3.0.1",
-        "cors": "^2.8.3",
-        "discord.js": "^12.5.3",
-        "dotenv": "^10.0.0",
-        "express": "^4.16.3",
-        "express-session": "^1.17.2",
-        "express-winston": "^4.1.0",
-        "form-data": "^4.0.0",
-        "helmet": "^4.6.0",
-        "jsonwebtoken": "^8.5.1",
-        "lodash": "^4.17.19",
-        "mkpath": "^1.0.0",
-        "module-alias": "^2.2.0",
-        "moment": "^2.24.0",
-        "moment-timezone": "^0.5.32",
-        "mongoose": "^5.7.11",
-        "morgan": "^1.9.0",
-        "noble-ed25519": "^1.2.1",
-        "node-fetch": "^2.6.1",
-        "node-schedule": "^2.0.0",
-        "pg": "^8.6.0",
-        "walkdir": "0.4.1",
-        "web3": "^1.3.6",
-        "winston": "^3.2.1",
-        "winston-daily-rotate-file": "^4.4.0",
-        "winston-transport": "^4.4.0"
-    },
-    "devDependencies": {
-        "eslint": "^7.27.0",
-        "nodemon": "^2.0.7"
-    }
+  "name": "dapp-scaffold",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:3000/",
+  "dependencies": {
+    "@ant-design/icons": "^4.5.0",
+    "@craco/craco": "^5.7.0",
+    "@ledgerhq/hw-transport-webusb": "^5.41.0",
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
+    "@project-serum/serum": "^0.13.34",
+    "@project-serum/sol-wallet-adapter": "^0.2.0",
+    "@solana/spl-token": "0.1.3",
+    "@solana/spl-token-registry": "^0.2.64",
+    "@solana/spl-token-swap": "0.1.0",
+    "@solana/web3.js": "^1.7.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@types/react-router-dom": "^5.1.6",
+    "antd": "^4.15.6",
+    "axios": "^0.21.1",
+    "bn.js": "^5.1.3",
+    "borsh": "^0.4.0",
+    "bs58": "^4.0.1",
+    "buffer-layout": "^1.2.0",
+    "craco-less": "^1.17.1",
+    "dotenv": "^10.0.0",
+    "eventemitter3": "^4.0.7",
+    "jazzicon": "^1.5.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "typescript": "^4.0.0",
+    "web-vitals": "^1.1.2"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node server.js",
+    "client": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "program:build": "cd program && cargo build-bpf",
+    "program:test": "cd program && cargo test-bpf",
+    "localnet:up": "solana-test-validator --bpf-program BpfProgram1111111111111111111111111111111111 program/target/deploy/bpf_program_template.so --reset",
+    "localnet:logs": "solana logs",
+    "predeploy": "git pull --ff-only && yarn && yarn build",
+    "deploy": "gh-pages -d build",
+    "deploy:ar": "arweave deploy-dir build --key-file ",
+    "format:fix": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
+    "server": "nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run client\""
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solana-labs/dapp-scaffold"
+  },
+  "homepage": ".",
+  "devDependencies": {
+    "@types/bn.js": "^4.11.6",
+    "@types/bs58": "^4.0.1",
+    "@types/jest": "^24.9.1",
+    "@types/ledgerhq__hw-transport": "^4.21.3",
+    "@types/ledgerhq__hw-transport-webusb": "^4.70.1",
+    "@types/node": "^12.12.62",
+    "@types/react": "^16.9.50",
+    "@types/react-dom": "^16.9.8",
+    "arweave-deploy": "^1.9.1",
+    "concurrently": "^6.1.0",
+    "gh-pages": "^3.1.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.1.2"
+  }
 }

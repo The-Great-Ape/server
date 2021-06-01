@@ -1,20 +1,26 @@
 {
     "parserOptions": {
         "ecmaVersion": 2020,
-        "sourceType": "module"
+        "sourceType": "module",
+        "allowImportExportEverywhere": false,
+        "ecmaFeatures": {
+            "globalReturn": false
+        },
+        "requireConfigFile": false
     },
     "env": {
-        "es6":     true,
-        "node":    true,
-        "mocha":   true
+        "es6": true,
+        "node": true,
+        "mocha": true
     },
     "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended"
+        "eslint:recommended"
     ],
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "rules": {
-        "indent": ["error", 4, {"SwitchCase": 1}],
+        "indent": ["error", 4, {
+            "SwitchCase": 1
+        }],
         "quotes": ["error", "single"],
         "semi": ["error", "always"],
         "no-console": "warn",
@@ -29,7 +35,9 @@
             "asyncArrow": "always"
         }],
         "space-before-blocks": ["error", "always"],
-        "keyword-spacing": ["error", { "before": true }],
+        "keyword-spacing": ["error", {
+            "before": true
+        }],
         "no-unused-expressions": "error",
         "array-callback-return": "error",
         "no-useless-constructor": "error",

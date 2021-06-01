@@ -15,7 +15,7 @@ class MainController {
         let { token, signature, address } = req.body;
         address = Uint8Array.from(address.data);
         signature = Uint8Array.from(signature.data);
-        token = new TextEncoder().encode('helloworld');
+        token = new TextEncoder().encode('$GRAPE');
         const isSigned = await ed.verify(signature, token, address);
 
         if (isSigned) {

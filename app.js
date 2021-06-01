@@ -3,7 +3,7 @@ Dependencies
 ---------------*/
 
 //modules
-import "dotenv/config.js";
+import 'dotenv/config.js';
 
 import cors from 'cors';
 import express from 'express';
@@ -44,7 +44,7 @@ class App {
 
     async initServer() {
         this.app = express();
-        this.port = this.port ? this.port : parseInt(config.PORT || 4000, 10);
+        this.port = this.port ? this.port : parseInt(config.PORT || 5000, 10);
         try {
             await this.initDB();
 
@@ -101,7 +101,7 @@ class App {
 
     //Controllers
     initControllers() {
-       MainController.addRoutes(this.app);
+        MainController.addRoutes(this.app);
     }
 
     //Logs
