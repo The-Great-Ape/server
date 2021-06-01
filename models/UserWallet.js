@@ -22,14 +22,34 @@ class UserWallet {
 
         return null;
     }
+    
+
+    static async getByUser(userId) {
+        const text = 'SELECT * FROM user_wallets WHERE user_id = $1';
+        const values = [userId];
+        let response = await db.query(text, values);
+
+        if (response) {
+            response = response.map(wallet => new UserWallet(wallet));
+            return response;
+        }
+
+        return [];
+    }
 
     static async createUserWallet(userId, address) {
-        const text = 'INSERT INTO user_wallets(user_id, address) VALUES($1, $2) RETURNING *';
-        const values = [userId, address];
+        let wallet = await UserWallet.getByAddress(address);
 
-        let response = await db.query(text, values);
-        response = response[0];
-        return new UserWallet(response);
+        if(!wallet){
+            const text = 'INSERT INTO user_wallets(user_id, address) VALUES($1, $2) RETURNING *';
+            const values = [userId, address];
+    
+            let response = await db.query(text, values);
+            response = response[0];
+            return new UserWallet(response);
+        }else if(wallet.userId === userId){
+            return wallet;
+        }
     }
 }
 

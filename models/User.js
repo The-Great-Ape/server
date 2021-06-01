@@ -11,10 +11,10 @@ class User {
     }
 
     static async createUser(discordId) {
-        let user = await User.getByDiscordId(discordId);
+        let user = discordId && await User.getByDiscordId(discordId);
 
         if(!user){
-            const text = 'INSERT INTO users(discord_id) VALUES($1) RETURNING *';
+            const text = 'INSERT INTO users(discord_id, has_wallet) VALUES($1, false) RETURNING *';
             const values = [discordId || null];
     
             let response = await db.query(text, values);
@@ -77,8 +77,8 @@ class User {
 
 
     async save() {
-        const text = 'UPDATE users SET discord_id = $2 WHERE user_id = $1';
-        const values = [this.userId, this.discordId];
+        const text = 'UPDATE users SET discord_id = $2, has_wallet=$3 WHERE user_id = $1';
+        const values = [this.userId, this.discordId, this.hasWallet];
         let response = await db.query(text, values);
     }
 }

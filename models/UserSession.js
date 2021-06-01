@@ -5,47 +5,55 @@ import UserWallet from './UserWallet.js';
 
 class UserSession {
 
-    static async register(address, serverId) {
-        let user = UserSession.getByAddress(address);
+    static async registerFromDiscord(userId, publicKey) {
+        let user = await User.getById(userId);
+        let userWallet = false;
 
-        if (serverId) {
-            await UserServer.createUserServer(user.userId, serverId);
+        if (user) {
+            userWallet = await UserWallet.createUserWallet(userId, publicKey);
+            user.hasWallet = true;
+            await user.save();
         }
+
+        if (userWallet) {
+            let user = await UserSession.getByAddress(publicKey);
+            return user;
+        }else{
+            throw new Error('Invalid user')
+        }
+    }
+
+    static async registerFromClient(address) {
+        let user = await User.createUser();
+        let userWallet = await UserWallet.createUserWallet(user.userId, address);
+        let userServers = [];
+        
+        return UserSession.createUserSession(user, [userWallet], userServers);
     }
 
     static async getByAddress(address) {
         let userWallet = await UserWallet.getByAddress(address);
-        
+
 
         if (userWallet) {
-	    let userId = userWallet.userId;
-	    let user, userServers;
-            user = await User.getById(userId);
-            userServers = await UserServer.getUserServers(userId);
-            let servers = await Server.getServers();
-            
+            let userId = userWallet.userId;
+            let user = await User.getById(userId);
+            let userWallets = await UserWallet.getByUser(userId);
+            let userServers = await UserServer.getByUser(userId);
 
-            return {
-                ...user,
-                wallets: [userWallet],
-                userServers: [userServers],
-                servers
-            };
+            return UserSession.createUserSession(user, userWallets, userServers);
         } else {
-
-            return UserSession.createUserSession(address);
+            return UserSession.registerFromClient(address);
         }
     }
 
-    static async createUserSession(address) {
-        let user = await User.createUser();
-        let userWallet = await UserWallet.createUserWallet(user.userId, address);
+    static async createUserSession(user, userWallets, userServers) {
         let servers = await Server.getServers();
 
         return {
             ...user,
-            wallets: [userWallet],
-            userServers: [],
+            wallets: userWallets,
+            userServers: userServers,
             servers
         };
     }

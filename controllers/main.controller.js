@@ -86,10 +86,11 @@ class MainController {
     }
 
     static async registerServer(req, resp) {
-        const serverId = req.body.serverId;
-        const userId = req.params.userId;
+        const {userId} = req.body;
+        const {serverId} = req.params;
+        console.log(userId, serverId);
 
-        let userServer = await UserServer.createrUserServer(userId, serverId);
+        let userServer = await UserServer.createUserServer(userId, serverId);
 
         if (userServer) {
             resp.status(200).send(userServer);
@@ -99,8 +100,8 @@ class MainController {
     }
 
     static async unregisterServer(req, resp) {
-        const serverId = req.body.serverId;
-        const userId = req.params.userId;
+        const {userId} = req.body;
+        const {serverId} = req.params;
 
         let userServer = await UserServer.deleteUserServer(userId, serverId);
 
@@ -116,7 +117,8 @@ class MainController {
     static async discordLogin(req, res) {
         //create pendingUser record
         let state = encodeURIComponent(JSON.stringify({
-            test: 'test'
+            register: req.query.register,
+            serverId: req.query.serverId
         }));
 
         res.redirect(`https://discord.com/api/oauth2/authorize` +
@@ -127,11 +129,14 @@ class MainController {
     }
 
     static async discordCallback(req, resp) {
-        const { state } = req.query;
+        let { state } = req.query;
         const accessCode = req.query.code;
 
         state = state && JSON.parse(decodeURIComponent(state));
         let register = state.register;
+        let serverId = state.serverId;
+
+        console.log({serverId});
 
         if (!accessCode)
             return resp.send('No access code specified');
@@ -149,19 +154,28 @@ class MainController {
         let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
         const discordId = discordInfo && discordInfo.id;
-        let userId;
+        let userId, server;
 
         if(register){
             let user = discordId && await User.createUser(discordId);
             userId = user && user.userId;   
+            
+            console.log(serverId);
+            server = await Server.getById(serverId);
+
+            if(server && userId){
+                await UserServer.createUserServer(userId, serverId);
+            }
         }
 
         resp.redirect(process.env.CLIENT_URL +
             `?token=${accessCode}` +
             `&avatar=${discordInfo.avatar}` +
             `&username=${discordInfo.username}` +
+            `&serverName=${server && server.name}` + 
+            `&serverLogo=${server && encodeURIComponent(server.logo)}` + 
             `&discord_id=${discordId}` +
-            (userId && `&user_id=${userId}`) +
+            `&user_id=${userId}` +
             `&provider=discord` +
             (register ? `#/register` : `#/confirmation`));
     }
@@ -171,8 +185,8 @@ class MainController {
         app.post('/api/register', MainController.register);
         app.post('/api/login', MainController.validateSignature, MainController.login);
         app.get('/api/server', MainController.validateSignature, MainController.getServers);
-        app.put('/api/server/:serverId/user/:userId', MainController.validateSignature, MainController.registerServer);
-        app.delete('/api/server/:serverId/user/:userId', MainController.validateSignature, MainController.unregisterServer);
+        app.post('/api/server/:serverId/register', MainController.validateSignature, MainController.registerServer);
+        app.post('/api/server/:serverId/unregister', MainController.validateSignature, MainController.unregisterServer);
         app.get('/api/discord', MainController.discordLogin);
         app.get('/api/discord/callback', MainController.discordCallback);
     }

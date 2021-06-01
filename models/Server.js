@@ -17,7 +17,7 @@ class Server {
         return new Server(response);
     }
 
-    static async getServer(serverId) {
+    static async getById(serverId) {
         const text = 'SELECT * FROM servers WHERE server_id = $1';
         const values = [serverId];
         let response = await db.query(text, values);

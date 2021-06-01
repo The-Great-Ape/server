@@ -7,7 +7,7 @@ class UserServer {
         this.serverId = data.server_id;
     }
 
-    static async createrUserServer(userId, serverId) {
+    static async createUserServer(userId, serverId) {
         const text = 'INSERT INTO user_servers(user_id, server_id) VALUES($1,$2) RETURNING *';
         const values = [userId, serverId];
 
@@ -23,11 +23,17 @@ class UserServer {
         return response;
     }
 
-    static async getUserServers(userId) {
+    static async getByUser(userId) {
         const text = 'SELECT * FROM user_servers WHERE user_id = $1';
         const values = [userId];
         let response = await db.query(text, values);
-        return response;
+
+        if (response) {
+            response = response.map(server => new UserServer(server));
+            return response;
+        }
+
+        return [];
     }
 }
 
