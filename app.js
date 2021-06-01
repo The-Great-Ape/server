@@ -44,7 +44,7 @@ class App {
 
     async initServer() {
         this.app = express();
-        this.port = this.port ? this.port : parseInt(config.PORT || 5000, 10);
+        this.port = this.port ? this.port : parseInt(process.env.PORT || 4000, 10);
         try {
             await this.initDB();
 

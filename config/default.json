@@ -1,13 +1,5 @@
 {
     "port": "4000",
-    "discord": {
-        "redirect_uri": "http://localhost:4000/discord/callback",
-        "client_id": "844584321549598730",
-        "secret": "6oCHxCBKSBRcYEtwza69QO9KpPdAe-Fv",
-        "scopes": [
-            "identify"
-        ]
-    },
     "session": {
         "secret": "youshall",
         "cookie": {
