@@ -184,7 +184,7 @@ class MainController {
         app.put('/api/user/:userId', MainController.validateSignature, MainController.updateUser);
         app.post('/api/register', MainController.register);
         app.post('/api/login', MainController.validateSignature, MainController.login);
-        app.get('/api/server', MainController.validateSignature, MainController.getServers);
+        app.get('/api/server', MainController.getServers);
         app.post('/api/server/:serverId/register', MainController.validateSignature, MainController.registerServer);
         app.post('/api/server/:serverId/unregister', MainController.validateSignature, MainController.unregisterServer);
         app.get('/api/discord', MainController.discordLogin);
