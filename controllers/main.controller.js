@@ -75,7 +75,7 @@ class MainController {
 
     //Server
     //---------------------------
-    static async getServers() {
+    static async getServers(req, resp) {
         let servers = await Server.getServers();
 
         if (servers) {
