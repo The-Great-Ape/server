@@ -41,8 +41,15 @@ class MainController {
     static async register(req, resp) {
         let { userId, publicKey } = req.body;
 
-        let userWallet = await UserWallet.createUserWallet(userId, publicKey);
+        let user = await User.getById(userId);
+        let userWallet = false;
 
+        if(user){
+            userWallet = await UserWallet.createUserWallet(userId, publicKey);
+            user.hasWallet = true;
+            await user.save();
+        }
+       
         if (userWallet) {
             let user = await UserSession.getByAddress(publicKey);
             resp.status(200).send(user);
@@ -107,16 +114,24 @@ class MainController {
     //Discord
     //---------------------------
     static async discordLogin(req, res) {
+        //create pendingUser record
+        let state = encodeURIComponent(JSON.stringify({
+            test: 'test'
+        }));
+
         res.redirect(`https://discord.com/api/oauth2/authorize` +
             `?client_id=${process.env.DISCORD_OAUTH_CLIENT_ID}` +
             `&redirect_uri=${encodeURIComponent(process.env.DISCORD_OAUTH_REDIRECT_URL)}` +
-            (req.query.register && `?register=true`) +
+            (req.query.register && `&state=${state}`) +
             `&response_type=code&scope=${encodeURIComponent(config.discord.scopes.join(" "))}`)
     }
 
     static async discordCallback(req, resp) {
-        const { register } = req.query;
+        const { state } = req.query;
         const accessCode = req.query.code;
+
+        state = state && JSON.parse(decodeURIComponent(state));
+        let register = state.register;
 
         if (!accessCode)
             return resp.send('No access code specified');
@@ -125,7 +140,7 @@ class MainController {
         data.append('client_id', process.env.DISCORD_OAUTH_CLIENT_ID);
         data.append('client_secret', process.env.DISCORD_OAUTH_SECRET);
         data.append('grant_type', 'authorization_code');
-        data.append('redirect_uri', process.env.DISCORD_OAUTH_REDIRECT_URL + (register && `?register=true`));
+        data.append('redirect_uri', process.env.DISCORD_OAUTH_REDIRECT_URL);
         data.append('scope', 'identify');
         data.append('code', accessCode);
 
@@ -134,14 +149,18 @@ class MainController {
         let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
         const discordId = discordInfo && discordInfo.id;
-        let user = discordId && await User.createUser(discordId);
-        let userId = user && user.userId;
+        let userId;
+
+        if(register){
+            let user = discordId && await User.createUser(discordId);
+            userId = user && user.userId;   
+        }
 
         resp.redirect(process.env.CLIENT_URL +
             `?token=${accessCode}` +
             `&avatar=${discordInfo.avatar}` +
             `&username=${discordInfo.username}` +
-            `&discord_id=${discordInfo.id}` +
+            `&discord_id=${discordId}` +
             (userId && `&user_id=${userId}`) +
             `&provider=discord` +
             (register ? `#/register` : `#/confirmation`));

@@ -64,7 +64,7 @@ export default (client) => {
 	           		// console.log(role.name);
 	           		 
 	           		   const discordId = member.id;
-			   		   const dbDiscordId = await User.getByDiscordId(discordId);
+			   		   const dbDiscordId = await User.checkDiscordId(discordId);
 			   		  // console.log(discordId,dbDiscordId);
 			   		   if (discordId===dbDiscordId)
 			   		   		member.roles.add(role);
@@ -77,7 +77,7 @@ export default (client) => {
 	           		// Check wallet exists + specific token
 	           		
 	           		const discordId = member.id;
-			   		const dbDiscordId = await User.getByDiscordId(discordId);
+			   		const dbDiscordId = await User.checkDiscordId(discordId);
 			   		// if the user is has a verified wallet, now lets check specific token balance
 			   		 	if (discordId===dbDiscordId)
 			   		 		{
@@ -146,7 +146,7 @@ export default (client) => {
 	           		// Check wallet exists + specific token
 	           		
 	           		const discordId = member.id;
-			   		const dbDiscordId = await User.getByDiscordId(discordId);
+			   		const dbDiscordId = await User.checkDiscordId(discordId);
 			   		// if the user is has a verified wallet, now lets check specific token balance
 			   		 	if (discordId===dbDiscordId)
 			   		 		{
@@ -213,7 +213,7 @@ export default (client) => {
 	           		// Check wallet exists + specific token
 	           		
 	           		const discordId = member.id;
-			   		const dbDiscordId = await User.getByDiscordId(discordId);
+			   		const dbDiscordId = await User.checkDiscordId(discordId);
 			   		// if the user is has a verified wallet, now lets check specific token balance
 			   		 	if (discordId===dbDiscordId)
 			   		 		{

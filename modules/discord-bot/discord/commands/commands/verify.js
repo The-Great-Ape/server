@@ -22,7 +22,7 @@ export default {
         // const userId = 'c4425d86-6790-4a17-a854-1afcd2f4214';
         console.log(message.author.id);
         const discordId = message.author.id;
-        const dbDiscordId = await User.getByDiscordId(discordId);
+        const dbDiscordId = await User.checkDiscordId(discordId);
 
         console.log(dbDiscordId);
         //console.log(user);

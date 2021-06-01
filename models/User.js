@@ -6,15 +6,23 @@ class User {
         this.discordId = data.discord_id;
         this.twitterId = data.twitter_id;
         this.botToken = data.bottoken;
+        this.isOG = data.is_og;
+        this.hasWallet = data.has_wallet;
     }
 
     static async createUser(discordId) {
-        const text = 'INSERT INTO users(discord_id) VALUES($1) RETURNING *';
-        const values = [discordId || null];
+        let user = await User.getByDiscordId(discordId);
 
-        let response = await db.query(text, values);
-        response = response[0];
-        return new User(response);
+        if(!user){
+            const text = 'INSERT INTO users(discord_id) VALUES($1) RETURNING *';
+            const values = [discordId || null];
+    
+            let response = await db.query(text, values);
+            response = response[0];
+            return new User(response);
+        }
+        
+        return user;
     }
 
     static async getById(userId) {
@@ -25,7 +33,7 @@ class User {
         return new User(response);
     }
 
-    static async getByDiscordId(discordId) {
+    static async checkDiscordId(discordId) {
         try {
             const text = 'SELECT discord_id FROM users WHERE discord_id = $1';
             const values = [discordId];
@@ -35,6 +43,18 @@ class User {
                 return response.discord_id;
 
             return 0;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    static async getByDiscordId(discordId) {
+        try {
+            const text = 'SELECT discord_id FROM users WHERE discord_id = $1';
+            const values = [discordId];
+            let response = await db.query(text, values);
+            response = response[0];
+            return response;
         } catch (err) {
             console.error(err);
         }
