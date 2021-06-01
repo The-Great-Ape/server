@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "start": "nodemon app.js",
+        "start:prod": "node app.js",
         "bot": "node --experimental-specifier-resolution=node modules/discord-bot/bot.js",
         "script": "node ./script/script-app.js"
     },
