@@ -61,7 +61,7 @@ export default {
         }
 
         if (mydiscordid.localeCompare(dbDiscordId) === 0) {
-            message.channel.send('You are verified bro, chill for now.');
+            message.channel.send('You have already linked your Discord id with your wallet.');
         }
 
     //   }

@@ -13,9 +13,9 @@ export default {
         const embed = new Discord.MessageEmbed();
         embed
             .setColor('#2E145D')
-            .setTitle('Grapebot')
-            .setDescription('Hi! I\'m Grapebot. This is my helper description!')
-            .addFields(...commandInstructions)
+            .setTitle('GRAPE')
+            .setDescription('SPL Token Gated access!')
+           // .addFields(...commandInstructions)
             .setFooter('');
 
         message.channel.send(embed);

@@ -28,8 +28,7 @@ const initHandler = async () => {
       && !CommandUtil.OK_WITHOUT_LOGIN_COMMANDS.includes(command)
         ) {
             message.channel.send(
-                `🚧 You must create a wallet or login before making transfers. (commands: ${CommandUtil.creationCommands.map((c) => COMMAND_PREFIX + c).join(', ')}) 🚧`
-        + '\n🚧 This must be done in a private dm channel 🚧',
+                ` You are already connected, nothing to do here.`
             );
             return;
         }

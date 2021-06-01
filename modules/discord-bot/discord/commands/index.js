@@ -2,22 +2,22 @@ import fs from 'fs';
 import Discord from 'discord.js';
 
 const COMMANDS = {
-    CREATE_NEW: 'create-new',
-    LOGIN: 'login',
-    ME: 'me',
-    CLUSTER: 'cluster',
-    SEND: 'send',
-    LOGOUT: 'logout',
+  //  CREATE_NEW: 'create-new',
+  //  LOGIN: 'login',
+  //  ME: 'me',
+ //   CLUSTER: 'cluster',
+   // SEND: 'send',
+    //LOGOUT: 'logout',
     // SAVE_DISCORDKEY: 'save-discordkey',
     // DELETE_DISCORDKEY: 'delete-discordkey',
     // GET_DISCORDKEY: 'get-discordkey',
     HELP: 'help',
-    BALANCE: 'balance',
-    VERIFY: 'verify',
+   // BALANCE: 'balance',
+   VERIFY: 'verify',
 };
 
 const OK_WITHOUT_LOGIN_COMMANDS = [
-    COMMANDS.CREATE_NEW,
+   // COMMANDS.CREATE_NEW,
     COMMANDS.LOGIN,
     //COMMANDS.SAVE_DISCORDKEY,
     //  COMMANDS.DELETE_DISCORDKEY,

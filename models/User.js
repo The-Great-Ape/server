@@ -39,6 +39,22 @@ class User {
             console.error(err);
         }
     }
+    
+    static async getWalletByDiscordId(discordId) {
+        try {
+            const text = 'SELECT a.address as address FROM user_wallets a, users b  WHERE a.user_id=b.user_id and b.discord_id = $1';
+            const values = [discordId];
+            let response = await db.query(text, values);
+            response = response[0];
+            if (response)
+                return response.address;
+
+            return 0;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
 
     async save() {
         const text = 'UPDATE users SET discord_id = $2 WHERE user_id = $1';
