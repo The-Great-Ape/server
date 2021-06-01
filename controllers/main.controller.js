@@ -124,7 +124,7 @@ class MainController {
         res.redirect(`https://discord.com/api/oauth2/authorize` +
             `?client_id=${process.env.DISCORD_OAUTH_CLIENT_ID}` +
             `&redirect_uri=${encodeURIComponent(process.env.DISCORD_OAUTH_REDIRECT_URL)}` +
-            (req.query.register && `&state=${state}`) +
+            `&state=${state}` +
             `&response_type=code&scope=${encodeURIComponent(config.discord.scopes.join(" "))}`)
     }
 
