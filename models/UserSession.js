@@ -18,8 +18,8 @@ class UserSession {
         
 
         if (userWallet) {
-	        let userId = userWallet.userId;
-			let user, userServers;
+	    let userId = userWallet.userId;
+	    let user, userServers;
             user = await User.getById(userId);
             userServers = await UserServer.getUserServers(userId);
             let servers = await Server.getServers();
