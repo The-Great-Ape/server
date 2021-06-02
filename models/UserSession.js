@@ -52,7 +52,7 @@ class UserSession {
 
         return {
             ...user,
-            wallets: userWallets,
+            userWallets: userWallets,
             userServers: userServers,
             servers
         };

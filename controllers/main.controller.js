@@ -44,12 +44,12 @@ class MainController {
         let user = await User.getById(userId);
         let userWallet = false;
 
-        if(user){
+        if (user) {
             userWallet = await UserWallet.createUserWallet(userId, publicKey);
             user.hasWallet = true;
             await user.save();
         }
-       
+
         if (userWallet) {
             let user = await UserSession.getByAddress(publicKey);
             resp.status(200).send(user);
@@ -86,9 +86,8 @@ class MainController {
     }
 
     static async registerServer(req, resp) {
-        const {userId} = req.body;
-        const {serverId} = req.params;
-        console.log(userId, serverId);
+        const { userId } = req.body;
+        const { serverId } = req.params;
 
         let userServer = await UserServer.createUserServer(userId, serverId);
 
@@ -100,8 +99,8 @@ class MainController {
     }
 
     static async unregisterServer(req, resp) {
-        const {userId} = req.body;
-        const {serverId} = req.params;
+        const { userId } = req.body;
+        const { serverId } = req.params;
 
         let userServer = await UserServer.deleteUserServer(userId, serverId);
 
@@ -135,8 +134,7 @@ class MainController {
         state = state && JSON.parse(decodeURIComponent(state));
         let register = state.register;
         let serverId = state.serverId;
-
-        console.log({serverId});
+        let address = state.address;
 
         if (!accessCode)
             return resp.send('No access code specified');
@@ -150,30 +148,28 @@ class MainController {
         data.append('code', accessCode);
 
         const json = await (await fetch('https://discord.com/api/oauth2/token', { method: 'POST', body: data })).json();
-        console.log(json);
         let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
         const discordId = discordInfo && discordInfo.id;
         let userId, server;
 
-        if(register){
+        if (register) {
             let user = discordId && await User.createUser(discordId);
-            userId = user && user.userId;   
-            
-            console.log(serverId);
+            userId = user && user.userId;
+
             server = await Server.getById(serverId);
 
-            if(server && userId){
+            if (server && userId) {
                 await UserServer.createUserServer(userId, serverId);
             }
-        }
+        } 
 
         resp.redirect(process.env.CLIENT_URL +
             `?token=${accessCode}` +
             `&avatar=${discordInfo.avatar}` +
             `&username=${discordInfo.username}` +
-            `&serverName=${server && server.name}` + 
-            `&serverLogo=${server && encodeURIComponent(server.logo)}` + 
+            `&serverName=${server && server.name}` +
+            `&serverLogo=${server && encodeURIComponent(server.logo)}` +
             `&discord_id=${discordId}` +
             `&user_id=${userId}` +
             `&provider=discord` +
