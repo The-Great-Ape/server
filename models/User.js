@@ -6,7 +6,7 @@ class User {
         this.discordId = data.discord_id;
         this.twitterId = data.twitter_id;
         this.botToken = data.bottoken;
-        this.isOG = data.is_og;
+        this.is_og = data.is_og;
         this.hasWallet = data.has_wallet;
     }
 
@@ -35,7 +35,7 @@ class User {
 
     static async checkDiscordId(discordId) {
         try {
-            const text = 'SELECT discord_id FROM users WHERE discord_id = $1';
+            const text = "SELECT a.discord_id as discord_id FROM users a, user_wallets b WHERE a.user_id=b.user_id and  a.discord_id = $1 group by discord_id";
             const values = [discordId];
             let response = await db.query(text, values);
             response = response[0];
@@ -54,7 +54,8 @@ class User {
             const values = [discordId];
             let response = await db.query(text, values);
             response = response[0];
-            return response;
+                    return new User(response);
+
         } catch (err) {
             console.error(err);
         }
@@ -73,6 +74,12 @@ class User {
         } catch (err) {
             console.error(err);
         }
+    }
+
+	async save_og() {
+        const text = 'UPDATE users SET is_og = $2 WHERE user_id = $1';
+        const values = [this.userId, this.is_og];
+        let response = await db.query(text, values);
     }
 
 
