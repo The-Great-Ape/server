@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 
 export default (client) => {
 	// Read from Channel
-    const channelId = '848506777049235476';
+    const channelId = '848952686976303115';
 
     const getEmoji = (emojiName) => client.emojis.cache.find((emoji) => emoji.name === emojiName);
 
@@ -65,9 +65,22 @@ export default (client) => {
 	           		 
 	           		   const discordId = member.id;
 			   		   const dbDiscordId = await User.checkDiscordId(discordId);
-			   		  // console.log(discordId,dbDiscordId);
+			   		   console.log(discordId,dbDiscordId);
 			   		   if (discordId===dbDiscordId)
-			   		   		member.roles.add(role);
+			   		   			{
+				   		   			member.roles.add(role);
+				   		   			// Save OG users 	
+				   		 		if (member.roles.cache.find(r => r.name === "OG") )	
+				   		 			{
+				   		 				console.log('member is OG');
+		           		 	
+				   		 				let user = await User.getByDiscordId(discordId);
+				   		 				user.is_og = 1;
+				   		 				await user.save_og();
+				   		 				//
+	           		 				}
+
+				   		   		}
 	           		
            		}
            
@@ -75,12 +88,25 @@ export default (client) => {
            if(role.name === 'MEDIA Holder' )
            		{
 	           		// Check wallet exists + specific token
-	           		
+	           		 
 	           		const discordId = member.id;
 			   		const dbDiscordId = await User.checkDiscordId(discordId);
 			   		// if the user is has a verified wallet, now lets check specific token balance
 			   		 	if (discordId===dbDiscordId)
 			   		 		{
+				   		 	
+				   		 	
+				   		 	// Save OG users 	
+				   		 		if (member.roles.cache.find(r => r.name === "OG") )	
+	           		 	{
+		           		 	console.log('member is OG');
+		           		 	
+		           		 	let user = await User.getByDiscordId(discordId);
+				   		 	user.is_og = 1;
+				   		 	await user.save_og();
+		           		 	//
+	           		 	}
+	           		 	
 				   		 		
 				   		 		// Get Wallet Address
 				   		 		
@@ -151,6 +177,17 @@ export default (client) => {
 			   		 	if (discordId===dbDiscordId)
 			   		 		{
 				   		 		
+				   		 			// Save OG users 	
+				   		 		if (member.roles.cache.find(r => r.name === "OG") )	
+	           		 	{
+		           		 	console.log('member is OG');
+		           		 	
+		           		 	let user = await User.getByDiscordId(discordId);
+				   		 	user.is_og = 1;
+				   		 	await user.save_og();
+		           		 	//
+	           		 	}
+
 				   		 		// Get Wallet Address
 				   		 		
 				   		 		const DiscordWallet = await User.getWalletByDiscordId(discordId);
@@ -218,6 +255,18 @@ export default (client) => {
 			   		 	if (discordId===dbDiscordId)
 			   		 		{
 				   		 		
+				   		 			// Save OG users 	
+				   		 		if (member.roles.cache.find(r => r.name === "OG") )	
+	           		 	{
+		           		 	console.log('member is OG');
+		           		 	
+		           		 	let user = await User.getByDiscordId(discordId);
+				   		 	user.is_og = 1;
+				   		 	await user.save_og();
+		           		 	//
+	           		 	}
+
+
 				   		 		// Get Wallet Address
 				   		 		
 				   		 		const DiscordWallet = await User.getWalletByDiscordId(discordId);
