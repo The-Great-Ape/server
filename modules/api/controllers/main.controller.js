@@ -2,11 +2,11 @@ import config from 'config';
 import FormData from 'form-data';
 import fetch from 'node-fetch';
 import ed from 'noble-ed25519';
-import UserSession from '../models/UserSession.js';
-import UserServer from '../models/UserServer.js';
-import Server from '../models/Server.js';
-import User from '../models/User.js';
-import UserWallet from '../models/UserWallet.js';
+import UserSession from '../../../models/UserSession.js';
+import UserServer from '../../../models/UserServer.js';
+import Server from '../../../models/Server.js';
+import User from '../../../models/User.js';
+import UserWallet from '../../../models/UserWallet.js';
 
 class MainController {
     //Signature
@@ -120,7 +120,7 @@ class MainController {
             serverId: req.query.serverId
         }));
 
-        res.redirect(`https://discord.com/api/oauth2/authorize` +
+        res.redirect('https://discord.com/api/oauth2/authorize' +
             `?client_id=${process.env.DISCORD_OAUTH_CLIENT_ID}` +
             `&redirect_uri=${encodeURIComponent(process.env.DISCORD_OAUTH_REDIRECT_URL)}` +
             `&state=${state}` +
@@ -162,7 +162,7 @@ class MainController {
             if (server && userId) {
                 await UserServer.createUserServer(userId, serverId);
             }
-        } 
+        }
 
         resp.redirect(process.env.CLIENT_URL +
             `?token=${accessCode}` +

@@ -13,10 +13,9 @@ import config from 'config';
 import session from 'express-session';
 
 //lib
-import util from './lib/util.js';
-import db from './lib/db.js';
-import logger from './lib/logger.js';
-import UserSession from './models/UserSession.js';
+import db from '../../lib/db.js';
+import util from '../../lib/util.js';
+import logger from '../../lib/logger.js';
 
 //controllers
 import MainController from './controllers/main.controller.js';
@@ -44,7 +43,8 @@ class App {
 
     async initServer() {
         this.app = express();
-        this.port = this.port ? this.port : parseInt(process.env.PORT || 4000, 10);
+        this.port = this.port ? this.port : parseInt(process.env.API_PORT || 5000, 10);
+
         try {
             await this.initDB();
 
@@ -95,7 +95,7 @@ class App {
 
     //Mongoose
     async initDB() {
-        //await db.connect();
+        await db.syncTables();
         logger.info(`Worker ${process.pid}: [Postgres]: Connected.`);
     }
 

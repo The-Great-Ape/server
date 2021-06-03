@@ -1,0 +1,94 @@
+version: '3.9'
+
+volumes:
+  postgres_data_dev: {}
+  postgres_backup_dev: {}
+  pgadmin_data: {}
+  node_modules: {}
+
+services:
+    postgres:
+        container_name: grape_postgres_server
+        build: ./docker/postgres
+        volumes:
+        - postgres_data_dev:/var/lib/postgresql/data
+        - postgres_backup_dev:/backups
+        env_file: .env
+        networks:
+            - db
+            - back
+
+    api:
+        restart: always
+        container_name: grape_api
+        build:
+            context: .
+            dockerfile: ./docker/api/Dockerfile
+        depends_on:
+            - postgres
+        ports:
+            - "${API_PORT}:${API_PORT}"
+        env_file: .env
+        networks:
+            - back
+        tty: true
+        stdin_open: true
+        volumes:
+            - .:/app
+            - node_modules:/app/node_modules
+        logging:
+            options:
+                max-file: "10"
+                max-size: "10m"
+
+    bot:
+        restart: always
+        container_name: grape_bot
+        build:
+            context: .
+            dockerfile: ./docker/api/Dockerfile
+        command: npm run bot
+        depends_on:
+            - postgres
+        env_file: .env
+        networks:
+            - back
+        volumes:
+            - .:/app
+            - node_modules:/app/node_modules
+        logging:
+            options:
+                max-file: "10"
+                max-size: "10m"
+
+    nginx:
+        restart: always
+        container_name: nginx_server
+        build: ./docker/nginx
+        env_file: .env
+        volumes:
+            - ./docker/nginx/templates:/etc/nginx/templates
+        depends_on:
+            - api
+        ports:
+            - "0.0.0.0:80:80"
+        networks:
+            - back
+
+    pgadmin:
+        container_name: pgadmin4_container
+        image: dpage/pgadmin4
+        restart: always
+        depends_on:
+            - postgres
+        env_file: .env
+        ports:
+            - "${PG_ADMIN_PORT}:80"
+        volumes:
+            - pgadmin_data:/var/lib/pgadmin
+        networks:
+            - db
+
+networks:
+    back:
+    db:

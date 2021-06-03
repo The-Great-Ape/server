@@ -1,11 +1,15 @@
 {
-    "name": "api",
+    "name": "grape_app",
     "version": "6.29.0",
     "private": true,
     "scripts": {
-        "start": "nodemon app.js",
-        "start:prod": "node app.js",
+        "start": "docker-compose up --build --force-recreate api",
+        "start:daemon": "docker-compose up -d --build --force-recreate api",
+        "api:dev": "nodemon modules/api/app.js",
+        "api:prod": "node --experimental-specifier-resolution=node modules/api/app.js",
+        "start:bot": "docker-compose up --build --force-recreate bot",
         "bot": "node --experimental-specifier-resolution=node modules/discord-bot/bot.js",
+        "pgadmin": "docker-compose up --build -d pgadmin",
         "script": "node ./script/script-app.js"
     },
     "_moduleAliases": {
@@ -32,7 +36,7 @@
         "form-data": "^4.0.0",
         "helmet": "^4.6.0",
         "jsonwebtoken": "^8.5.1",
-        "keyv": "^3.1.0",
+        "keyv": "^4.0.3",
         "lodash": "^4.17.19",
         "mkpath": "^1.0.0",
         "module-alias": "^2.2.0",
