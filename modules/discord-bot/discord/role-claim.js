@@ -248,7 +248,7 @@ export default (client) => {
            		 if(role.name === 'SAMO Holder' )
            		{
 	           		// Check wallet exists + specific token
-	           		
+	           	
 	           		const discordId = member.id;
 			   		const dbDiscordId = await User.checkDiscordId(discordId);
 			   		// if the user is has a verified wallet, now lets check specific token balance
