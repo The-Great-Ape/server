@@ -2,11 +2,11 @@ import config from 'config';
 import FormData from 'form-data';
 import fetch from 'node-fetch';
 import ed from 'noble-ed25519';
-import UserSession from './models/UserSession.js';
-import UserServer from './models/UserServer.js';
-import Server from './models/Server.js';
-import User from './models/User.js';
-import UserWallet from './models/UserWallet.js';
+import UserSession from '../models/UserSession.js';
+import UserServer from '../models/UserServer.js';
+import Server from '../models/Server.js';
+import User from '../models/User.js';
+import UserWallet from '../models/UserWallet.js';
 
 class MainController {
     //Signature
