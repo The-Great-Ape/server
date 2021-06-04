@@ -2,11 +2,11 @@ import config from 'config';
 import FormData from 'form-data';
 import fetch from 'node-fetch';
 import ed from 'noble-ed25519';
-import UserSession from '../../../models/UserSession.js';
-import UserServer from '../../../models/UserServer.js';
-import Server from '../../../models/Server.js';
-import User from '../../../models/User.js';
-import UserWallet from '../../../models/UserWallet.js';
+import UserSession from './models/UserSession.js';
+import UserServer from './models/UserServer.js';
+import Server from './models/Server.js';
+import User from './models/User.js';
+import UserWallet from './models/UserWallet.js';
 
 class MainController {
     //Signature
@@ -124,7 +124,7 @@ class MainController {
             `?client_id=${process.env.DISCORD_OAUTH_CLIENT_ID}` +
             `&redirect_uri=${encodeURIComponent(process.env.DISCORD_OAUTH_REDIRECT_URL)}` +
             `&state=${state}` +
-            `&response_type=code&scope=${encodeURIComponent(config.discord.scopes.join(" "))}`)
+            `&response_type=code&scope=${encodeURIComponent(config.discord.scopes.join(' '))}`);
     }
 
     static async discordCallback(req, resp) {
@@ -148,7 +148,7 @@ class MainController {
         data.append('code', accessCode);
 
         const json = await (await fetch('https://discord.com/api/oauth2/token', { method: 'POST', body: data })).json();
-        let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
+        let discordInfo = await fetch('https://discord.com/api/users/@me', { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
         const discordId = discordInfo && discordInfo.id;
         let userId, server;
@@ -172,8 +172,8 @@ class MainController {
             `&serverLogo=${server && encodeURIComponent(server.logo)}` +
             `&discord_id=${discordId}` +
             `&user_id=${userId}` +
-            `&provider=discord` +
-            (register ? `#/register` : `#/confirmation`));
+            '&provider=discord' +
+            (register ? '#/register' : '#/confirmation'));
     }
 
     static addRoutes(app) {

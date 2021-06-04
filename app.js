@@ -14,9 +14,9 @@ import config from 'config';
 import session from 'express-session';
 
 //lib
-import db from '../../lib/db.js';
-import util from '../../lib/util.js';
-import logger from '../../lib/logger.js';
+import db from './lib/db.js';
+import util from './lib/util.js';
+import logger from './lib/logger.js';
 
 //controllers
 import MainController from './controllers/main.controller.js';
