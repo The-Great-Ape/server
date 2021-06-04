@@ -7,6 +7,7 @@ import 'dotenv/config.js';
 
 import cors from 'cors';
 import express from 'express';
+import 'express-async-errors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import config from 'config';
@@ -84,6 +85,16 @@ class App {
 
         //Session
         this.app.use(session(config.session));
+
+        //Errors
+        this.app.use((err, req, res, next) => {
+            if (err.message === 'Access denied') {
+                res.status(403);
+                res.json({ error: err.message });
+            }
+
+            next(err);
+        });
 
         logger.info(`Worker ${process.pid}: [Express]: Initialized`);
     }
