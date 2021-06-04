@@ -8,21 +8,24 @@ class User {
         this.botToken = data.bottoken;
         this.is_og = data.is_og;
         this.hasWallet = data.has_wallet;
-        
+
     }
 
     static async createUser(discordId) {
-        let user = discordId && await User.getByDiscordId(discordId);
+        if (!discordId)
+            throw new Error('Missing Discord ID');
 
-        if(!user){
+        let user = await User.getByDiscordId(discordId);
+
+        if (!user) {
             const text = 'INSERT INTO users(discord_id, has_wallet) VALUES($1, false) RETURNING *';
             const values = [discordId || null];
-    
+
             let response = await db.query(text, values);
             response = response[0];
             return new User(response);
         }
-        
+
         return user;
     }
 
@@ -55,13 +58,13 @@ class User {
             const values = [discordId];
             let response = await db.query(text, values);
             response = response[0];
-                    return new User(response);
+            return new User(response);
 
         } catch (err) {
             console.error(err);
         }
     }
-    
+
     static async getWalletByDiscordId(discordId) {
         try {
             const text = 'SELECT a.address as address FROM user_wallets a, users b  WHERE a.user_id=b.user_id and b.discord_id = $1';
@@ -77,7 +80,7 @@ class User {
         }
     }
 
-	async save_og() {
+    async save_og() {
         const text = 'UPDATE users SET is_og = $2 WHERE user_id = $1';
         const values = [this.userId, this.is_og];
         //console.log(this);
