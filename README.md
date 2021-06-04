@@ -9,10 +9,10 @@
 ## SPL Token gated communities on Discord
 
 ### Features
-- Validate Solana wallet ownership
-- Validate Discordid ownership
-- Creates a link between the validated discord id and validated  Wallet
-- Allows token balance rules to obtain roles on Discord
+- Validate Solana wallet ownership.
+- Validate Discordid ownership.
+- Creates a link between the validated discord id and validated  Wallet.
+- Allows token balance rules to obtain roles on Discord and gate channel access based on ownership.
 
 
 ## Acknowledgements
