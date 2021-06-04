@@ -8,6 +8,7 @@ class User {
         this.botToken = data.bottoken;
         this.is_og = data.is_og;
         this.hasWallet = data.has_wallet;
+        
     }
 
     static async createUser(discordId) {
@@ -50,7 +51,7 @@ class User {
 
     static async getByDiscordId(discordId) {
         try {
-            const text = 'SELECT discord_id FROM users WHERE discord_id = $1';
+            const text = 'SELECT * FROM users WHERE discord_id = $1';
             const values = [discordId];
             let response = await db.query(text, values);
             response = response[0];
@@ -79,6 +80,7 @@ class User {
 	async save_og() {
         const text = 'UPDATE users SET is_og = $2 WHERE user_id = $1';
         const values = [this.userId, this.is_og];
+        //console.log(this);
         let response = await db.query(text, values);
     }
 
