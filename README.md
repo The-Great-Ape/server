@@ -17,3 +17,4 @@
 
 ## Acknowledgements
 * This project uses [Solana](https://solana.com/). A fast, secure, and censorship resistant blockchain providing the open infrastructure required for global adoption.
+* This project uses  [Discord](https://discord.com/brand-new).  a VoIP, instant messaging and digital distribution platform designed for creating communities.
