@@ -10,9 +10,9 @@
 
 ### Features
 - Validate Solana wallet ownership
--  Validate Discordid ownership
-- Creates a link between the discord id and the Wallet
--  Allows token balance rules to obtain roles on Discord
+- Validate Discordid ownership
+- Creates a link between the validated discord id and validated  Wallet
+- Allows token balance rules to obtain roles on Discord
 
 
 ## Acknowledgements
