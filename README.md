@@ -14,10 +14,6 @@
 - Creates a link between the discord id and the Wallet
 -  Allows token balance rules to obtain roles on Discord
 
-### Deploy your own API
-The easiest way, to get up and running quickly, is to deploy to Heroku using the button below.<br>
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
 
 ## Acknowledgements
 * This project uses [Solana](https://solana.com/). A fast, secure, and censorship resistant blockchain providing the open infrastructure required for global adoption.
