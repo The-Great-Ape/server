@@ -12,10 +12,7 @@ class User {
     }
 
     static async createUser(discordId) {
-        if (!discordId)
-            throw new Error('Missing Discord ID');
-
-        let user = await User.getByDiscordId(discordId);
+        let user = discordId && await User.getByDiscordId(discordId);
 
         if (!user) {
             const text = 'INSERT INTO users(discord_id, has_wallet) VALUES($1, false) RETURNING *';
