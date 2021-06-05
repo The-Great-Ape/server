@@ -8,6 +8,12 @@
 
 ## SPL Token gated communities on Discord
 
+### Prerequisites
+
+### Installing
+
+### Deployment
+
 ### Features
 - Validate Solana wallet ownership.
 - Validate Discordid ownership.
