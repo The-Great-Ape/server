@@ -7,6 +7,7 @@
 # GRAPE ACCESS
 
 ## SPL Token gated communities on Discord
+Connecting members social accounts to unique cryptographic keys is the core of our Dynamic Balance-Based Membership solution.
 
 ### Prerequisites
 
@@ -24,3 +25,4 @@
 ## Acknowledgements
 * This project uses [Solana](https://solana.com/). A fast, secure, and censorship resistant blockchain providing the open infrastructure required for global adoption.
 * This project uses  [Discord](https://discord.com/brand-new).  a VoIP, instant messaging and digital distribution platform designed for creating communities.
+* The project uses parts of [Solbot](https://github.com/paul-schaaf/solbot) by Paul Schaaf, a tipping bot for Solana.
