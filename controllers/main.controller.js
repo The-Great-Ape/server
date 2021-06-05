@@ -45,9 +45,21 @@ class MainController {
         let userWallet = false;
 
         if (user) {
-            userWallet = await UserWallet.createUserWallet(userId, publicKey);
-            user.hasWallet = true;
-            await user.save();
+            userWallet = await UserWallet.getByAddress(publicKey);
+
+            if (!userWallet) {
+                userWallet = await UserWallet.createUserWallet(userId, publicKey);
+                user.hasWallet = true;
+                await user.save();
+            } else if (userWallet.userId !== userId) {
+                let oldUser = await User.getById(userWallet.userId);
+                oldUser.discordId = user.discordId;
+                await oldUser.save();
+
+                //delete temp user
+                await User.deleteUser(userId);
+                await UserServer.deleteByUser(userId);
+            }
         }
 
         if (userWallet) {
@@ -153,7 +165,7 @@ class MainController {
         const discordId = discordInfo && discordInfo.id;
         let userId, server;
 
-        if (register) {
+        if (register && discordId) {
             let user = discordId && await User.createUser(discordId);
             userId = user && user.userId;
 

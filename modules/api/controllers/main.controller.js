@@ -7,6 +7,7 @@ import UserServer from '../../../models/UserServer.js';
 import Server from '../../../models/Server.js';
 import User from '../../../models/User.js';
 import UserWallet from '../../../models/UserWallet.js';
+import logger from '../../../lib/logger.js';
 
 class MainController {
     //Signature
@@ -45,9 +46,16 @@ class MainController {
         let userWallet = false;
 
         if (user) {
-            userWallet = await UserWallet.createUserWallet(userId, publicKey);
-            user.hasWallet = true;
-            await user.save();
+            userWallet = await UserWallet.getByAddress(publicKey);
+
+            if (!userWallet) {
+                userWallet = await UserWallet.createUserWallet(userId, publicKey);
+                user.hasWallet = true;
+                await user.save();
+            } else if (userWallet.userId !== userId) {
+                userWallet.userId = userId;
+                await userWallet.save();
+            }
         }
 
         if (userWallet) {
@@ -114,6 +122,7 @@ class MainController {
     //Discord
     //---------------------------
     static async discordLogin(req, res) {
+
         //create pendingUser record
         let state = encodeURIComponent(JSON.stringify({
             register: req.query.register,
@@ -124,7 +133,7 @@ class MainController {
             `?client_id=${process.env.DISCORD_OAUTH_CLIENT_ID}` +
             `&redirect_uri=${encodeURIComponent(process.env.DISCORD_OAUTH_REDIRECT_URL)}` +
             `&state=${state}` +
-            `&response_type=code&scope=${encodeURIComponent(config.discord.scopes.join(" "))}`)
+            `&response_type=code&scope=${encodeURIComponent(config.discord.scopes.join(' '))}`);
     }
 
     static async discordCallback(req, resp) {
@@ -148,13 +157,11 @@ class MainController {
         data.append('code', accessCode);
 
         const json = await (await fetch('https://discord.com/api/oauth2/token', { method: 'POST', body: data })).json();
-        let discordInfo = await fetch(`https://discord.com/api/users/@me`, { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
+        let discordInfo = await fetch('https://discord.com/api/users/@me', { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
         const discordId = discordInfo && discordInfo.id;
         let userId, server;
 
-        console.log(discordId);
-        
         if (register && discordId) {
             let user = discordId && await User.createUser(discordId);
             userId = user && user.userId;
@@ -174,8 +181,8 @@ class MainController {
             `&serverLogo=${server && encodeURIComponent(server.logo)}` +
             `&discord_id=${discordId}` +
             `&user_id=${userId}` +
-            `&provider=discord` +
-            (register ? `#/register` : `#/confirmation`));
+            '&provider=discord' +
+            (register ? '#/register' : '#/confirmation'));
     }
 
     static addRoutes(app) {

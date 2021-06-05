@@ -18,8 +18,8 @@ class UserSession {
         if (userWallet) {
             let user = await UserSession.getByAddress(publicKey);
             return user;
-        }else{
-            throw new Error('Invalid user')
+        } else {
+            throw new Error('Invalid user');
         }
     }
 
@@ -27,7 +27,7 @@ class UserSession {
         let user = await User.createUser();
         let userWallet = await UserWallet.createUserWallet(user.userId, address);
         let userServers = [];
-        
+
         return UserSession.createUserSession(user, [userWallet], userServers);
     }
 

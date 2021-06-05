@@ -87,14 +87,14 @@ class App {
         this.app.use(session(config.session));
 
         //Errors
-        this.app.use((err, req, res, next) => {
-            if (err.message === 'Access denied') {
-                res.status(403);
-                res.json({ error: err.message });
-            }
+        // this.app.use((err, req, res, next) => {
+        //     if (err.message === 'Access denied') {
+        //         res.status(403);
+        //         res.json({ error: err.message });
+        //     }
 
-            next(err);
-        });
+        //     next(err);
+        // });
 
         logger.info(`Worker ${process.pid}: [Express]: Initialized`);
     }

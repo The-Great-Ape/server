@@ -17,12 +17,12 @@ class UserServer {
         let userServer;
 
         userServers.forEach(item=>{
-            if(item.serverId === serverId){
+            if (item.serverId === serverId) {
                 userServer = item;
             }
         });
 
-        if(userServer){
+        if (userServer) {
             return userServer;
         }
 
@@ -38,6 +38,13 @@ class UserServer {
     static async deleteUserServer(userId, serverId) {
         const text = 'DELETE FROM user_servers WHERE user_id = $1 AND server_id = $2';
         const values = [userId, serverId];
+        let response = await db.query(text, values);
+        return response;
+    }
+
+    static async deleteByUser(userId) {
+        const text = 'DELETE FROM user_servers WHERE user_id = $1';
+        const values = [userId];
         let response = await db.query(text, values);
         return response;
     }

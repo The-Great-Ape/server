@@ -34,12 +34,19 @@ class User {
         const values = [userId];
         let response = await db.query(text, values);
         response = response[0];
-        return new User(response);
+        return response && new User(response) || null;
+    }
+
+    static async deleteUser(userId) {
+        const text = 'DELETE FROM users WHERE user_id = $1';
+        const values = [userId];
+        let response = await db.query(text, values);
+        return response;
     }
 
     static async checkDiscordId(discordId) {
         try {
-            const text = "SELECT a.discord_id as discord_id FROM users a, user_wallets b WHERE a.user_id=b.user_id and  a.discord_id = $1 group by discord_id";
+            const text = 'SELECT a.discord_id as discord_id FROM users a, user_wallets b WHERE a.user_id=b.user_id and  a.discord_id = $1 group by discord_id';
             const values = [discordId];
             let response = await db.query(text, values);
             response = response[0];
@@ -58,7 +65,7 @@ class User {
             const values = [discordId];
             let response = await db.query(text, values);
             response = response[0];
-            return new User(response);
+            return response && new User(response) || null;
 
         } catch (err) {
             console.error(err);
