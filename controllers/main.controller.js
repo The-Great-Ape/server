@@ -163,12 +163,17 @@ class MainController {
         let discordInfo = await fetch('https://discord.com/api/users/@me', { headers: { Authorization: `Bearer ${json.access_token}` } }); // Fetching user data
         discordInfo = await discordInfo.json();
         const discordId = discordInfo && discordInfo.id;
-        let userId, server;
+        let userId, server, isRegistered = false;
 
         if (register && discordId) {
-            let user = discordId && await User.createUser(discordId);
-            userId = user && user.userId;
+            let user = await User.getByDiscordId(discordId);
+            if (!user) {
+                user = await User.createUser(discordId);
+            } else {
+                isRegistered = true;
+            }
 
+            userId = user && user.userId;
             server = await Server.getById(serverId);
 
             if (server && userId) {
@@ -185,6 +190,7 @@ class MainController {
             `&discord_id=${discordId}` +
             `&user_id=${userId}` +
             '&provider=discord' +
+            `&is_registered=${isRegistered}` +
             (register ? '#/register' : '#/confirmation'));
     }
 

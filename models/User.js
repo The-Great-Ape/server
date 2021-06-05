@@ -13,9 +13,10 @@ class User {
 
     static async createUser(discordId) {
         let user = discordId && await User.getByDiscordId(discordId);
+        console.log(user);
 
         if (!user) {
-            const text = 'INSERT INTO users(discord_id, has_wallet) VALUES($1, false) RETURNING *';
+            const text = 'INSERT INTO users(discord_id, has_wallet) VALUES ($1, false) RETURNING *';
             const values = [discordId || null];
 
             let response = await db.query(text, values);
