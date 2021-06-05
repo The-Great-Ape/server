@@ -49,9 +49,13 @@ Connecting members social accounts to unique cryptographic keys is the core of o
 
   ETH_RPC_URL = # https://mainnet.infura.io/v3/<INFURA.IO_API_KEY>
   ```
+ 6. Clone ane deploy client from this repository: https://github.com/The-Great-Ape/client
 
 ### Deployment
-
++ Clone this repository.
++ Install dependencies using: ``` npm install ```
++ Start up server using: ``` npm start ```
++ Start up Discord bot using ``` npm run bot ```
 
 ### Features
 - Validate Solana wallet ownership.
