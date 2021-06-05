@@ -47,7 +47,7 @@ Connecting members social accounts to unique cryptographic keys is the core of o
   DISCORD_BOT_TOKEN = # Get from Discord
   DISCORD_BOT_ID = # Get from Discord
 
-  ETH_RPC_URL = # https://mainnet.infura.io/v3/<INFURA.IO API KEY>
+  ETH_RPC_URL = # https://mainnet.infura.io/v3/<INFURA.IO_API_KEY>
   ```
 
 ### Deployment
