@@ -33,7 +33,6 @@ Connecting members social accounts to unique cryptographic keys is the core of o
 
     const getEmoji = (emojiName) => client.emojis.cache.find((emoji) => emoji.name === emojiName);
   ```
- 
   
 4. Install [PostgresSQL](https://www.postgresql.org/).
 5. Rename the .env.example file to .env and fill in the following variables:
@@ -70,6 +69,22 @@ Connecting members social accounts to unique cryptographic keys is the core of o
   DISCORD_BOT_ID = # Get from Discord
 
   ETH_RPC_URL = # https://mainnet.infura.io/v3/<INFURA.IO_API_KEY>
+  
+  DISCORD_CHANNEL_ID = 
+  
+  DISCORD_EMOJI_1 = 
+  DISCORD_EMOJI_2 = 
+  DISCORD_EMOJI_3 = 
+  DISCORD_EMOJI_4 = 
+  
+  DISCORD_ROLE_1 = 
+  DISCORD_ROLE_2 = 
+  DISCORD_ROLE_3 = 
+  DISCORD_ROLE_4 =
+  
+  MINT_TOKEN_1 = 
+  MINT_TOKEN_2 =
+  MINT_TOKEN_3 = 
   ```
  6. Clone ane deploy client from this repository: https://github.com/The-Great-Ape/client
 
