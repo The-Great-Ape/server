@@ -4,23 +4,24 @@ import fetch from 'node-fetch';
 
 export default (client) => {
 	// Read from Channel
-    const channelId = '848952686976303115';
+    const channelId = process.env.DISCORD_CHANNEL_ID
+;
 
     const getEmoji = (emojiName) => client.emojis.cache.find((emoji) => emoji.name === emojiName);
 
 	// Uploaded server Emojis
     const emojis = {
-        walletv2: 'Verified Wallet',
-        medianetwork: 'MEDIA Holder',
-        mercurial: 'Mercurial Holder',
-        samo: 'SAMO Holder',
+        walletv2: `${process.env.DISCORD_ROLE_1}`,
+        medianetwork:`${process.env.DISCORD_ROLE_2}` ,
+        mercurial: `${process.env.DISCORD_ROLE_3}`,
+        samo: `${process.env.DISCORD_ROLE_4}`,
     };
 
     const reactions = [];
     
     // Welcome text which is rebuilt everytime
 
-    let emojiText = "Gated SPL token community access!\n https://verify.grapes.network\n 0.1 MEDIA for Media access \n 10 MER for Mercurial access \n 10,000 SAMO for Samo access \n \n";
+    let emojiText = "Gated SPL token community access!\n https://verify.grapes.network/start\n 0.1 MEDIA for Media access \n 10 MER for Mercurial access \n 10,000 SAMO for Samo access \n \n";
     for (const key in emojis) {
         const emoji = getEmoji(key);
         reactions.push(emoji);
@@ -58,7 +59,7 @@ export default (client) => {
            // Check which role the user is clicking for
            
                       
-           if(role.name === 'Verified Wallet' )
+           if(role.name ===  `${process.env.DISCORD_ROLE_1}` )
            		{
 	           		// Just check that a wallet exists
 	           		// console.log(role.name);
@@ -85,7 +86,7 @@ export default (client) => {
            		}
            
            
-           if(role.name === 'MEDIA Holder' )
+           if(role.name === `${process.env.DISCORD_ROLE_2}` )
            		{
 	           		// Check wallet exists + specific token
 	           		 
@@ -143,11 +144,11 @@ export default (client) => {
 										// Check for Media Token over 0.1
 										// MEDIA ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs
 										//EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v USDC
-											if (mint=== 'ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs' )
+											if (mint=== `${process.env.MINT_TOKEN_1}` )
 											
 												{
 													
-													if (uiAmount>0.099)
+													if (uiAmount>`${process.env.MINT_MIN_BALANCE_1}`)
 														{
 															member.roles.add(role);
 															
@@ -167,7 +168,7 @@ export default (client) => {
            		}
            		// End MEDIA
            		
-           		 if(role.name === 'Mercurial Holder' )
+           		 if(role.name === `${process.env.DISCORD_ROLE_3}` )
            		{
 	           		// Check wallet exists + specific token
 	           		
@@ -223,11 +224,11 @@ export default (client) => {
 										// Check for Media Token over 0.1
 										// MEDIA ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs
 										//EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v USDC
-											if (mint=== 'MERt85fc5boKw3BW1eYdxonEuJNvXbiMbs6hvheau5K' )
+											if (mint=== `${process.env.MINT_TOKEN_2}` )
 											
 												{
 													
-													if (uiAmount>9.99)
+													if (uiAmount>`${process.env.MINT_MIN_BALANCE_2}`)
 														{
 															member.roles.add(role);
 															
@@ -245,7 +246,7 @@ export default (client) => {
 	           		 
 	           		
            		}
-           		 if(role.name === 'SAMO Holder' )
+           		 if(role.name === `${process.env.DISCORD_ROLE_4}` )
            		{
 	           		// Check wallet exists + specific token
 	           	
@@ -302,11 +303,11 @@ export default (client) => {
 										// Check for Media Token over 0.1
 										// MEDIA ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs
 										//EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v USDC
-											if (mint=== '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU' )
+											if (mint=== `${process.env.MINT_TOKEN_3}` )
 											
 												{
 													
-													if (uiAmount>9999.99)
+													if (uiAmount> `${process.env.MINT_MIN_BALANCE_3}` )
 														{
 															member.roles.add(role);
 															
