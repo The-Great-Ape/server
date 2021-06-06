@@ -106,3 +106,4 @@ Connecting members social accounts to unique cryptographic keys is the core of o
 * This project uses  [Discord](https://discord.com/brand-new). A VoIP, instant messaging and digital distribution platform designed for creating communities.
 * The project uses parts of [Solbot](https://github.com/paul-schaaf/solbot) by Paul Schaaf, a tipping bot for Solana.
 * This project uses [Project Serum's markets](https://projectserum.com/). An ecosystem that brings unprecedented speed and low transaction costs to decentralized finance.
+* This project uses [noble-ed25519](https://github.com/paulmillr/noble-ed25519). Fastest JS implementation of ed25519, an elliptic curve that could be used for asymmetric encryption and EDDSA signature scheme.
