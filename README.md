@@ -71,20 +71,20 @@ Connecting members social accounts to unique cryptographic keys is the core of o
   ETH_RPC_URL = # https://mainnet.infura.io/v3/<INFURA.IO_API_KEY>
   
   DISCORD_CHANNEL_ID = 
+
+  DISCORD_ROLE_1 =Verified Wallet 
+  DISCORD_ROLE_2 =MEDIA Holder 
+  DISCORD_ROLE_3 =Mercurial Holder 
+  DISCORD_ROLE_4 =SAMO Holder
   
-  DISCORD_EMOJI_1 = 
-  DISCORD_EMOJI_2 = 
-  DISCORD_EMOJI_3 = 
-  DISCORD_EMOJI_4 = 
+  MINT_TOKEN_1 =ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs 
+  MINT_TOKEN_2 =MERt85fc5boKw3BW1eYdxonEuJNvXbiMbs6hvheau5K
+  MINT_TOKEN_3 =7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU 
   
-  DISCORD_ROLE_1 = 
-  DISCORD_ROLE_2 = 
-  DISCORD_ROLE_3 = 
-  DISCORD_ROLE_4 =
-  
-  MINT_TOKEN_1 = 
-  MINT_TOKEN_2 =
-  MINT_TOKEN_3 = 
+  MINT_MIN_BALANCE_1 =0.099
+  MINT_MIN_BALANCE_2 =9.99
+  MINT_MIN_BALANCE_3 =9999.99
+
   ```
  6. Clone ane deploy client from this repository: https://github.com/The-Great-Ape/client
 
