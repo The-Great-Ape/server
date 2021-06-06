@@ -109,5 +109,5 @@ Connecting members social accounts to unique cryptographic keys is the core of o
 * This project uses [noble-ed25519](https://github.com/paulmillr/noble-ed25519). Fastest JS implementation of ed25519, an elliptic curve that could be used for asymmetric encryption and EDDSA signature scheme.
 * This project uses [Serum Price API](https://github.com/sonar-watch/serum-price-api) by Sonar
 
-If you are having difficulty setting this up this application please contact BillysDiscord#5191 or DeanMachine#9058 or GintoniQ#3987 on Discord for assistance and access
+If you are having difficulty with this application please contact BillysDiscord#5191 or DeanMachine#9058 or GintoniQ#3987 on Discord for assistance and access
 to a live working Demo.
