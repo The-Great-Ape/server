@@ -144,7 +144,7 @@ export default (client) => {
 										// Check for Media Token over 0.1
 										// MEDIA ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs
 										//EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v USDC
-											if (mint=== `${process.env.MINT_TOKEN_1}` )
+											if (mint===`${process.env.MINT_TOKEN_1}` )
 											
 												{
 													
@@ -171,6 +171,7 @@ export default (client) => {
            		 if(role.name === `${process.env.DISCORD_ROLE_3}` )
            		{
 	           		// Check wallet exists + specific token
+	           		
 	           		
 	           		const discordId = member.id;
 			   		const dbDiscordId = await User.checkDiscordId(discordId);
@@ -224,12 +225,16 @@ export default (client) => {
 										// Check for Media Token over 0.1
 										// MEDIA ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs
 										//EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v USDC
+										
 											if (mint=== `${process.env.MINT_TOKEN_2}` )
 											
 												{
 													
-													if (uiAmount>`${process.env.MINT_MIN_BALANCE_2}`)
+													
+													if (uiAmount> 9.99)
 														{
+															console.log(process.env.MINT_MIN_BALANCE_2);
+
 															member.roles.add(role);
 															
 														}
@@ -307,7 +312,7 @@ export default (client) => {
 											
 												{
 													
-													if (uiAmount> `${process.env.MINT_MIN_BALANCE_3}` )
+													if (uiAmount>9.999 )
 														{
 															member.roles.add(role);
 															
