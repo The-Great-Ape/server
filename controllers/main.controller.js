@@ -146,7 +146,6 @@ class MainController {
         state = state && JSON.parse(decodeURIComponent(state));
         let register = state.register;
         let serverId = state.serverId;
-        let address = state.address;
 
         if (!accessCode)
             return resp.send('No access code specified');
@@ -170,7 +169,10 @@ class MainController {
             if (!user) {
                 user = await User.createUser(discordId);
             } else {
-                isRegistered = true;
+                let wallets = await UserWallet.getByUser(user.userId);
+                if (wallets && wallets.length) {
+                    isRegistered = true;
+                }
             }
 
             userId = user && user.userId;
