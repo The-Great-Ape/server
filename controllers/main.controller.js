@@ -7,6 +7,7 @@ import UserServer from '../models/UserServer.js';
 import Server from '../models/Server.js';
 import User from '../models/User.js';
 import UserWallet from '../models/UserWallet.js';
+import bs58 from "bs58";
 
 class MainController {
     //Signature
@@ -28,9 +29,10 @@ class MainController {
     //User
     //---------------------------
     static async login(req, resp) {
-        let { publicKey } = req.body;
+        let { publicKey, address } = req.body;
+           address = bs58.encode(Uint8Array.from(address.data));
 
-        let user = await UserSession.getByAddress(publicKey);
+        let user = await UserSession.getByAddress(address);
         if (user) {
             resp.status(200).send(user);
         } else {
