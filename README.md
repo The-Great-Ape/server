@@ -37,7 +37,7 @@ Connecting members social accounts to unique cryptographic keys is the core of o
 4. Install [PostgresSQL](https://www.postgresql.org/).
 5. Rename the .env.example file to .env and fill in the following variables:
   ```
-  ODE_ENV = dev
+  NODE_ENV = dev
 
   API_PORT = 5000
 
