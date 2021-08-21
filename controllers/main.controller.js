@@ -30,7 +30,7 @@ class MainController {
     //---------------------------
     static async login(req, resp) {
         let { publicKey, address } = req.body;
-           address = bs58.encode(Uint8Array.from(address.data));
+                address = bs58.encode(Uint8Array.from(address.data));
 
         let user = await UserSession.getByAddress(address);
         if (user) {
@@ -41,16 +41,23 @@ class MainController {
     }
 
     static async register(req, resp) {
-        let { userId, publicKey } = req.body;
+        let { userId, publicKey,address } = req.body;
+        address = bs58.encode(Uint8Array.from(address.data));
 
         let user = await User.getById(userId);
         let userWallet = false;
+        
+        
 
         if (user) {
-            userWallet = await UserWallet.getByAddress(publicKey);
+	        
+	        
+            userWallet = await UserWallet.getByAddress(address);
 
             if (!userWallet) {
-                userWallet = await UserWallet.createUserWallet(userId, publicKey);
+	            
+	            
+                userWallet = await UserWallet.createUserWallet(userId, address);
                 user.hasWallet = true;
                 await user.save();
             } else if (userWallet.userId !== userId) {
@@ -65,7 +72,7 @@ class MainController {
         }
 
         if (userWallet) {
-            let user = await UserSession.getByAddress(publicKey);
+            let user = await UserSession.getByAddress(address);
             resp.status(200).send(user);
         } else {
             resp.status(500).send('Invalid address');
@@ -200,7 +207,7 @@ class MainController {
 
     static addRoutes(app) {
         app.put('/api/user/:userId', MainController.validateSignature, MainController.updateUser);
-        app.post('/api/register', MainController.register);
+        app.post('/api/register', MainController.validateSignature,MainController.register);
         app.post('/api/login', MainController.validateSignature, MainController.login);
         app.get('/api/server', MainController.getServers);
         app.post('/api/server/:serverId/register', MainController.validateSignature, MainController.registerServer);
